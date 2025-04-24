@@ -68,7 +68,7 @@
 <body>
 <div class="container">
   <h2>프로젝트 생성</h2>
-  <form th:action="@{/projects/create}" method="post">
+  <form th:action="@{/task/create}" method="post">
     <div class="form-group">
       <label for="name">프로젝트 이름</label>
       <input type="text" id="name" name="name" class="form-control" placeholder="예: Team A Management" required>
@@ -93,7 +93,7 @@
     </div>
 
     <div class="bottom-link">
-      <a th:href="@{/task}">내 프로젝트로 돌아가기</a>
+      <a th:href="@{/task/{memberId}(memberId=${memberId})}">내 프로젝트로 돌아가기</a>
     </div>
   </form>
 </div>

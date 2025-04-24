@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/task/**").authenticated()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/register").permitAll()
-//                        .anyRequest().permitAll()
+                        //.anyRequest().permitAll()
                 )
 
                 .formLogin(form -> form // 로그인

@@ -31,7 +31,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.addCookie(cookie);
         redisTemplate.opsForValue().set(sessionId, memberId);
 
-        response.sendRedirect("/task");
+        response.sendRedirect("/task/" + memberId);
 
     }
 

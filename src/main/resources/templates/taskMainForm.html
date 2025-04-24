@@ -2,96 +2,95 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>프로젝트 메인</title>
+  <title>Task Main</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f8fa;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem;
-      min-height: 100vh;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
     }
 
-    .container {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      width: 800px;
-    }
-
-    .header {
+    header {
+      background-color: #4a90e2;
+      padding: 1rem 2rem;
+      color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
     }
 
-    .btn {
-      padding: 0.6rem 1.2rem;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    .header-left {
+      font-size: 1.5rem;
       font-weight: bold;
     }
 
-    .btn:hover {
-      background-color: #357ab7;
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .project-list {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #fafafa;
-    }
-
-    .project-item {
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.6rem;
-      border: 1px solid #ccc;
+    select {
+      padding: 0.4rem;
       border-radius: 6px;
+      border: none;
     }
+
+    button {
+      background-color: white;
+      color: #4a90e2;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    .project-card {
+      background-color: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <form th:action="@{/logout}" method="post" style="margin: 0;">
-      <button type="submit" class="btn">로그아웃</button>
+
+<header>
+  <div class="header-left">내 프로젝트</div>
+  <div class="header-right">
+    <span th:text="${memberName}" style="color: white; font-weight: bold;"></span>
+    <form th:action="@{/task/{memberId}(memberId=${memberId})}" method="post">
+      <select name="cud" onchange="this.form.submit()">
+        <option value="JOIN">가입</option>
+        <option value="DORMANT">휴면</option>
+        <option value="WITHDRAWAL">탈퇴</option>
+      </select>
     </form>
-    <form th:action="@{/task/create}" method="get" style="margin: 0;">
-      <button type="submit" class="btn">프로젝트 생성</button>
+
+    <form th:action="@{/task/create}" method="get">
+      <button type="submit">프로젝트 생성</button>
+    </form>
+
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">로그아웃</button>
     </form>
   </div>
+</header>
 
-  <h2>내 프로젝트 목록</h2>
-  <div class="project-list">
-    <div class="project-item" th:each="project : ${projects}">
-      <strong th:text="${project.name}">프로젝트 이름</strong> -
-      <span th:text="${project.status}">상태</span>
-    </div>
+<div class="container">
+  <div th:each="project : ${projects}" class="project-card">
+    <h3 th:text="${project.name}">프로젝트 이름</h3>
+    <p th:text="${project.status}">상태</p>
   </div>
 </div>
+
 </body>
 </html>
