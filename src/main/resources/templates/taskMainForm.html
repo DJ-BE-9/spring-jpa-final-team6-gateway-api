@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>프로젝트 메인</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f8fa;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 800px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background-color: #357ab7;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .project-list {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fafafa;
+    }
+
+    .project-item {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <form th:action="@{/logout}" method="post" style="margin: 0;">
+      <button type="submit" class="btn">로그아웃</button>
+    </form>
+    <form th:action="@{/task/create}" method="get" style="margin: 0;">
+      <button type="submit" class="btn">프로젝트 생성</button>
+    </form>
+  </div>
+
+  <h2>내 프로젝트 목록</h2>
+  <div class="project-list">
+    <div class="project-item" th:each="project : ${projects}">
+      <strong th:text="${project.name}">프로젝트 이름</strong> -
+      <span th:text="${project.status}">상태</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
