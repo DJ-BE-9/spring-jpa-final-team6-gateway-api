@@ -17,8 +17,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        CustomAuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler();
-        CustomAuthenticationFailureHandler failureHandler = new CustomAuthenticationFailureHandler();
+        CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler = new CustomAuthenticationSuccessHandler();
+        CustomAuthenticationFailureHandler customAuthenticationFailureHandler = new CustomAuthenticationFailureHandler();
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -28,18 +28,15 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form // 로그인
-                        .loginPage("/loginForm")
-                        .usernameParameter("id")
-                        .passwordParameter("pwd")
+                        .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successHandler(successHandler)
-                        .failureHandler(failureHandler)
+                        .usernameParameter("memberId")
+                        .passwordParameter("password")
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 );
 
-
-
-        http.formLogin(Customizer.withDefaults());
 
         return http.build();
     }

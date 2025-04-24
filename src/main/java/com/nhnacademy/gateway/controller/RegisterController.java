@@ -6,6 +6,7 @@ import com.nhnacademy.gateway.exception.ValidationFailedException;
 import com.nhnacademy.gateway.model.dto.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,9 @@ public class RegisterController {
     @Autowired
     private RegisterAdaptor registerAdaptor;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public String getRegister() {
         return "registerForm";
@@ -34,7 +38,9 @@ public class RegisterController {
             throw new ValidationFailedException(bindingResult);
         }
 
-        log.info("registerRequest memberId:{}", registerRequest.getMemberId());
+        String memberId = registerRequest.getMemberId();
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
+        registerRequest.setPassword(encodedPassword);
 
         if(!registerAdaptor.sendRegisterRequest(registerRequest)) {
             throw new RegisterProcessException("회원가입 실패했습니다.");

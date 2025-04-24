@@ -3,7 +3,6 @@ package com.nhnacademy.gateway.common.adaptor;
 import com.nhnacademy.gateway.model.dto.RegisterRequest;
 import com.nhnacademy.gateway.model.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,9 +22,6 @@ public class RegisterAdaptor {
     }
 
     public boolean sendRegisterRequest(RegisterRequest registerRequest) {
-        log.info("registerRequest userId:{}", registerRequest.getMemberId());
-        log.info("registerRequest password:{}", registerRequest.getPassword());
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

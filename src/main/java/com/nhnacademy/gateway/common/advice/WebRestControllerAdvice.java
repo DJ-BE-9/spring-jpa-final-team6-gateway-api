@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.common.advice;
 
+import com.nhnacademy.gateway.exception.LoginProcessException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,11 @@ public class WebRestControllerAdvice {
 
     @ExceptionHandler(RegisterProcessException.class)
     public ResponseEntity<String> registerProcessException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(LoginProcessException.class)
+    public ResponseEntity<String> loginProcessException(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
