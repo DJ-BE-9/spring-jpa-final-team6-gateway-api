@@ -3,8 +3,6 @@ package com.nhnacademy.gateway.common.adaptor.login;
 import com.nhnacademy.gateway.exception.ResponseDtoException;
 import com.nhnacademy.gateway.model.dto.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,12 +13,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Objects;
 
 @Component
-public class UserNameAdaptor {
+public class MemberNameAdaptor {
     private static final String ACCOUNT_API_USERNAME_URL = "http://localhost:9090/account/name";
 
     private RestTemplate restTemplate;
 
-    public UserNameAdaptor() {
+    public MemberNameAdaptor() {
         this.restTemplate = new RestTemplate();
     }
 

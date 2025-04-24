@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.controller.task;
 
-import com.nhnacademy.gateway.common.adaptor.login.UserNameAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.MemberNameAdaptor;
 import com.nhnacademy.gateway.model.dto.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TaskController {
 
     @Autowired
-    private UserNameAdaptor userNameAdaptor;
+    private MemberNameAdaptor userNameAdaptor;
 
     @GetMapping
     public String getTask(Model model,
