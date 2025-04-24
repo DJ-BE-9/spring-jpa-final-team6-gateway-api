@@ -75,7 +75,7 @@
       </select>
     </form>
 
-    <form th:action="@{/task/create}" method="get">
+    <form th:action="@{/task/create/{memberId}(memberId=${memberId})}" method="get">
       <button type="submit">프로젝트 생성</button>
     </form>
 

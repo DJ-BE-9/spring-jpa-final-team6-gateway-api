@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.controller;
+package com.nhnacademy.gateway.controller.login;
 
 import com.nhnacademy.gateway.common.adaptor.login.RegisterAdaptor;
 import com.nhnacademy.gateway.exception.RegisterProcessException;

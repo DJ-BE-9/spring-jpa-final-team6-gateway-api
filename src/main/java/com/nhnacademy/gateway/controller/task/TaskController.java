@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.controller;
+package com.nhnacademy.gateway.controller.task;
 
 import com.nhnacademy.gateway.common.adaptor.login.UserNameAdaptor;
 import com.nhnacademy.gateway.model.dto.MemberIdRequest;
@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/task/{memberId}")
@@ -25,6 +23,7 @@ public class TaskController {
         ResponseUserNameDto response = userNameAdaptor.sendResponseUserNameDto(new MemberIdRequest(memberId));
 
         model.addAttribute("memberName", response.getUserName());
+        model.addAttribute("memberId", memberId);
 
         return "taskMainForm";
     }
