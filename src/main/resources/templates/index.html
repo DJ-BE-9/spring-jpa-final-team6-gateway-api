@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>메인 페이지</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eef2f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 360px;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      background-color: #4a90e2;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #357ab7;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>환영합니다!</h1>
+  <a th:href="@{/login}" class="btn">로그인</a>
+  <a th:href="@{/register}" class="btn">회원가입</a>
+</div>
+</body>
+</html>
