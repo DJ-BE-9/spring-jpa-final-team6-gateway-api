@@ -1,9 +1,8 @@
-package com.nhnacademy.gateway.common.adaptor;
+package com.nhnacademy.gateway.common.adaptor.login;
 
 import com.nhnacademy.gateway.exception.LoginProcessException;
 import com.nhnacademy.gateway.model.dto.LoginRequest;
 import com.nhnacademy.gateway.model.dto.LoginResponseDto;
-import com.nhnacademy.gateway.model.dto.ResponseDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.common.adaptor;
+package com.nhnacademy.gateway.common.adaptor.login;
 
 import com.nhnacademy.gateway.model.dto.RegisterRequest;
 import com.nhnacademy.gateway.model.dto.ResponseDto;

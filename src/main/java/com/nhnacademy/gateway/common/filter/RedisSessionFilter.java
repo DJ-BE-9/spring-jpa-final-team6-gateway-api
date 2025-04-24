@@ -1,7 +1,6 @@
 package com.nhnacademy.gateway.common.filter;
 
-import com.nhnacademy.gateway.common.adaptor.LoginAdaptor;
-import com.nhnacademy.gateway.model.dto.LoginRequest;
+import com.nhnacademy.gateway.common.adaptor.login.LoginAdaptor;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

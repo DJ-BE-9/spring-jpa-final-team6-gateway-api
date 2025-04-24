@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.controller;
 
-import com.nhnacademy.gateway.common.adaptor.RegisterAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.RegisterAdaptor;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.exception.ValidationFailedException;
 import com.nhnacademy.gateway.model.dto.RegisterRequest;

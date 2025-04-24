@@ -1,13 +1,12 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.LoginAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.LoginAdaptor;
 import com.nhnacademy.gateway.exception.LoginProcessException;
 import com.nhnacademy.gateway.model.domain.LoginProcessMember;
 import com.nhnacademy.gateway.model.dto.LoginRequest;
 import com.nhnacademy.gateway.model.dto.LoginResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
