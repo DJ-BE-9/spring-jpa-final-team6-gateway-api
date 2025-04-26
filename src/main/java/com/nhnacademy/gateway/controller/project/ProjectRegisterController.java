@@ -1,18 +1,18 @@
 package com.nhnacademy.gateway.controller.project;
 
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
-import com.nhnacademy.gateway.service.TaskService;
+import com.nhnacademy.gateway.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/task/{memberId}/register")
+@RequestMapping("/project/{memberId}/register")
 public class ProjectRegisterController {
 
     @Autowired
-    private TaskService taskService;
+    private ProjectService projectService;
 
     @GetMapping
     public String getProjectRegister(Model model,
@@ -20,16 +20,16 @@ public class ProjectRegisterController {
 
         model.addAttribute("memberId", memberId);
 
-        return "taskRegisterForm";
+        return "ProjectRegisterForm";
     }
 
     @PostMapping
     public String postProject(@PathVariable("memberId") String memberId,
                               @ModelAttribute RegisterProjectRequest projectRequest) {
 
-        taskService.postProject(projectRequest);
+        projectService.postProject(projectRequest);
 
-        return "redirect:/task/" + memberId;
+        return "redirect:/project/" + memberId;
     }
 
 }

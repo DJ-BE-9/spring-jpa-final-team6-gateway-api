@@ -12,11 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Project {
-    @JsonProperty("project_id")
+
+//    @JsonProperty("project_id")
     private long projectId;
-    @JsonProperty("project_name")
+
+//    @JsonProperty("project_name")
     private String projectName;
-    @JsonProperty("project_state")
+
+//    @JsonProperty("project_state")
     private State projectState;
 
 }

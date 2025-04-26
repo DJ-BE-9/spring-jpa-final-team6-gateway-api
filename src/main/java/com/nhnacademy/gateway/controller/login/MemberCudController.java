@@ -16,7 +16,7 @@ public class MemberCudController {
     @Autowired
     private MemberStatusAdaptor memberStatusAdaptor;
 
-    @PostMapping("/task/{memberId}/state")
+    @PostMapping("/project/{memberId}/state")
     public String postMemberCud(@PathVariable("memberId") String memberId,
                                 @RequestParam("cud") Cud cud) {
 
@@ -25,7 +25,7 @@ public class MemberCudController {
             return "redirect:/";
         }
 
-        return "redirect:/task/" + memberId;
+        return "redirect:/project/" + memberId;
     }
 
 }
