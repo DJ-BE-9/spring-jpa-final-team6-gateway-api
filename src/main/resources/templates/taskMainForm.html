@@ -87,8 +87,8 @@
 
 <div class="container">
   <div th:each="project : ${projects}" class="project-card">
-    <h3 th:text="${project.name}">프로젝트 이름</h3>
-    <p th:text="${project.status}">상태</p>
+    <h3 th:text="${project.projectName}">프로젝트 이름</h3>
+    <p th:text="${project.projectState}">상태</p>
   </div>
 </div>
 

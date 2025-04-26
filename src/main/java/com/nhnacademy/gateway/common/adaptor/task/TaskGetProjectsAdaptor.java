@@ -1,6 +1,7 @@
 package com.nhnacademy.gateway.common.adaptor.task;
 
 import com.nhnacademy.gateway.exception.ResponseDtoException;
+import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +26,18 @@ public class TaskGetProjectsAdaptor {
     public ResponseProjectsDto sendAndGetProjects(MemberIdRequest memberIdRequest) {
 
         try {
-            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(TASK_API_URL + "/" +"/members"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            String url =TASK_API_URL  +"members/"+ memberIdRequest.getMemberId();
+            log.info(url);
+            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(TASK_API_URL  +"members/"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            log.info("response state: {}",response.getStatusCode());
 
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new ResponseDtoException("Project 리스트를 가져오지 못했습니다.");
             }
 
             return response.getBody();
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
+            log.error("try-catch: {}", e, e);
             throw new ResponseDtoException("Project 리스트를 가져오지 못했습니다.");
         }
     }
