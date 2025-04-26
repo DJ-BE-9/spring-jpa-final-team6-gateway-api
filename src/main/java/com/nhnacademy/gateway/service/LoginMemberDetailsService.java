@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.login.LoginAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.MemberLoginAdaptor;
 import com.nhnacademy.gateway.exception.LoginProcessException;
 import com.nhnacademy.gateway.model.domain.LoginProcessMember;
 import com.nhnacademy.gateway.model.dto.LoginRequest;
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class LoginMemberDetailsService implements UserDetailsService {
 
     @Autowired
-    private LoginAdaptor loginAdaptor;
+    private MemberLoginAdaptor loginAdaptor;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

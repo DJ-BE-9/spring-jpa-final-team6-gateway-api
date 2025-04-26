@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public class RegisterAdaptor {
+public class MemberRegisterAdaptor {
     private static final String REGISTER_API_URL = "http://localhost:9090/account/member";
 
     private RestTemplate restTemplate;
 
-    public RegisterAdaptor() {
+    public MemberRegisterAdaptor() {
         restTemplate = new RestTemplate();
     }
 

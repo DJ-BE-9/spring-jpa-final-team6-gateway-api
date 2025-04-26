@@ -13,12 +13,12 @@ import org.springframework.http.HttpHeaders;
 import java.util.Objects;
 
 @Component
-public class LoginAdaptor {
+public class MemberLoginAdaptor {
     private static final String LOGIN_API_URL = "http://localhost:9090/account/login";
 
     private RestTemplate restTemplate;
 
-    public LoginAdaptor() {
+    public MemberLoginAdaptor() {
         restTemplate = new RestTemplate();
     }
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Component
 public class MemberNameAdaptor {
-    private static final String ACCOUNT_API_USERNAME_URL = "http://localhost:9090/account/name";
+    private static final String ACCOUNT_API_MEMBER_NAME_URL = "http://localhost:9090/account/name";
 
     private RestTemplate restTemplate;
 
@@ -29,7 +29,7 @@ public class MemberNameAdaptor {
         HttpEntity<MemberIdRequest> requestHttpEntity = new HttpEntity<>(memberIdRequest, headers);
 
         try {
-            ResponseEntity<ResponseUserNameDto> response = restTemplate.postForEntity(ACCOUNT_API_USERNAME_URL, requestHttpEntity, ResponseUserNameDto.class);
+            ResponseEntity<ResponseUserNameDto> response = restTemplate.postForEntity(ACCOUNT_API_MEMBER_NAME_URL, requestHttpEntity, ResponseUserNameDto.class);
 
             if(!response.getStatusCode().is2xxSuccessful() || Objects.isNull(response)) {
                 throw new ResponseDtoException("Member Name 값을 가져오지 못했습니다.");

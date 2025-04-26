@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.common.filter;
 
-import com.nhnacademy.gateway.common.adaptor.login.LoginAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.MemberLoginAdaptor;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -29,7 +29,7 @@ public class RedisSessionFilter extends OncePerRequestFilter {
     private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    private LoginAdaptor loginAdaptor;
+    private MemberLoginAdaptor loginAdaptor;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

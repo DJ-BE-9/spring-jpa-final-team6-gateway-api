@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.controller.login;
 
-import com.nhnacademy.gateway.common.adaptor.login.RegisterAdaptor;
+import com.nhnacademy.gateway.common.adaptor.login.MemberRegisterAdaptor;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.exception.ValidationFailedException;
 import com.nhnacademy.gateway.model.dto.RegisterRequest;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequestMapping("/register")
-public class RegisterController {
+public class MemberRegisterController {
 
     @Autowired
-    private RegisterAdaptor registerAdaptor;
+    private MemberRegisterAdaptor registerAdaptor;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
