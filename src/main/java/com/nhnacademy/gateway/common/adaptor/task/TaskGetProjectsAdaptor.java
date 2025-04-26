@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Component
 public class TaskGetProjectsAdaptor {
-    private static final String TASK_API_URL = "http://localhost:7070/project";
+    private static final String TASK_API_URL = "http://localhost:7070/project/";
 
     private RestTemplate restTemplate;
 
@@ -25,7 +25,7 @@ public class TaskGetProjectsAdaptor {
     public ResponseProjectsDto sendAndGetProjects(MemberIdRequest memberIdRequest) {
 
         try {
-            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(TASK_API_URL + "/" + memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(TASK_API_URL + "/" +"/members"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
                 throw new ResponseDtoException("Project 리스트를 가져오지 못했습니다.");
