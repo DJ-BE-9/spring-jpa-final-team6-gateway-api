@@ -1,7 +1,7 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.task.TaskGetProjectsAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskPostProjectAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.TaskGetProjectsAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.TaskPostProjectAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;

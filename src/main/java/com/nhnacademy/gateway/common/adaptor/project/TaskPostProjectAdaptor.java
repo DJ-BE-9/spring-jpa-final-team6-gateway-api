@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.common.adaptor.task;
+package com.nhnacademy.gateway.common.adaptor.project;
 
 import com.nhnacademy.gateway.exception.ResponseDtoException;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
@@ -15,7 +15,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class TaskPostProjectAdaptor {
-    private static final String TASK_API_URL = "http://localhost:7070/project";
+    private static final String PROJECT_API_URL = "http://localhost:7070/project";
 
     private RestTemplate restTemplate;
 
@@ -34,7 +34,7 @@ public class TaskPostProjectAdaptor {
         log.info("projectRequest:{} {}", projectRequest.getProjectName(), projectRequest.getProjectState());
         log.info("projectRequest:{} {}", requestHttpEntity.getBody().getProjectName(), requestHttpEntity.getBody().getProjectState());
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(TASK_API_URL, requestHttpEntity, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(PROJECT_API_URL, requestHttpEntity, String.class);
 
             if(!response.getStatusCode().is2xxSuccessful() || Objects.isNull(response)) {
                 throw new ResponseDtoException("Project 생성하지 못했습니다.");

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/task/{memberId}")
+@RequestMapping("/project/{memberId}")
 @Slf4j
 public class ProjectController {
 

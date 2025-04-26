@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.common.adaptor.task;
+package com.nhnacademy.gateway.common.adaptor.project;
 
 import com.nhnacademy.gateway.exception.ResponseDtoException;
 import com.nhnacademy.gateway.model.domain.Project;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 public class TaskGetProjectsAdaptor {
-    private static final String TASK_API_URL = "http://localhost:7070/project/";
+    private static final String PROJECT_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
@@ -28,7 +28,7 @@ public class TaskGetProjectsAdaptor {
     public ResponseProjectsDto sendAndGetProjects(MemberIdRequest memberIdRequest) {
 
         try {
-            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(TASK_API_URL  +"members/"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(PROJECT_API_URL  +"members/"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
             log.error("{}", response.getBody());
             List<Project> projects = response.getBody().getProjects();
             projects.forEach(project -> {log.info("{}", project.getProjectName());});
