@@ -1,7 +1,7 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.task.TaskGetProjectsAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskPostProjectAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostProjectAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
@@ -18,18 +18,19 @@ import java.util.Objects;
 @Slf4j
 @Service
 @Transactional
-public class TaskService {
+public class ProjectService {
 
     @Autowired
-    private TaskGetProjectsAdaptor taskGetProjectsAdaptor;
+    private ProjectGetProjectsAdaptor projectGetProjectsAdaptor;
     @Autowired
-    private TaskPostProjectAdaptor taskPostProjectAdaptor;
+    private ProjectPostProjectAdaptor projectPostProjectAdaptor;
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
         if(Objects.isNull(memberIdRequest) || Objects.isNull(memberIdRequest.getMemberId()) || memberIdRequest.getMemberId().isEmpty()) {
             throw new EmptyRequestException("MemberIdRequest 값을 받지 못했습니다");
         }
-        ResponseProjectsDto responseProjectsDto = taskGetProjectsAdaptor.sendAndGetProjects(memberIdRequest);
+        ResponseProjectsDto responseProjectsDto = projectGetProjectsAdaptor.sendAndGetProjects(memberIdRequest);
+
 
         return responseProjectsDto.getProjects();
     }
@@ -39,7 +40,7 @@ public class TaskService {
             throw new EmptyRequestException("ProjectRequest 값을 받지 못했습니다");
         }
 
-        if(taskPostProjectAdaptor.sendProjectRegisterRequest(projectRequest)) {
+        if(projectPostProjectAdaptor.sendProjectRegisterRequest(projectRequest)) {
 
         }
 
