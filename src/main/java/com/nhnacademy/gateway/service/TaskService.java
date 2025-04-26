@@ -31,6 +31,7 @@ public class TaskService {
         }
         ResponseProjectsDto responseProjectsDto = taskGetProjectsAdaptor.sendAndGetProjects(memberIdRequest);
 
+
         return responseProjectsDto.getProjects();
     }
 

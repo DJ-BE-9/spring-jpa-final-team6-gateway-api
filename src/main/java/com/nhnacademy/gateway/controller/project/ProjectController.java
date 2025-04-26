@@ -5,6 +5,7 @@ import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
 import com.nhnacademy.gateway.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/task/{memberId}")
+@Slf4j
 public class ProjectController {
 
     @Autowired
@@ -25,11 +27,13 @@ public class ProjectController {
     public String getProjects(Model model,
                               @PathVariable("memberId") String memberId) {
         ResponseUserNameDto response = userNameAdaptor.sendResponseUserNameDto(new MemberIdRequest(memberId));
-
         model.addAttribute("memberName", response.getUserName());
         model.addAttribute("memberId", memberId);
 
         List<Project> projects = taskService.getProjectsByMemberId(new MemberIdRequest(memberId));
+        for(Project project : projects) {
+            log.error("{}", project.getProjectName());
+        }
         model.addAttribute("projects", projects);
 
         return "taskMainForm";
