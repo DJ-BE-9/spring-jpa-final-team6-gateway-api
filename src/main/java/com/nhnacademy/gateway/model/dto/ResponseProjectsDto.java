@@ -1,18 +1,19 @@
 package com.nhnacademy.gateway.model.dto;
 
-import com.nhnacademy.gateway.model.type.Cud;
+import com.nhnacademy.gateway.model.domain.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class MemberCudRequest {
+@NoArgsConstructor
+public class ResponseProjectsDto {
 
-    private String memberId;
-    private Cud cud;
+    private List<Project> projects;
 
 }

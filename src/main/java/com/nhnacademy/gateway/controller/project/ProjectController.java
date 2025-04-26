@@ -1,29 +1,36 @@
-package com.nhnacademy.gateway.controller.task;
+package com.nhnacademy.gateway.controller.project;
 
 import com.nhnacademy.gateway.common.adaptor.login.MemberNameAdaptor;
-import com.nhnacademy.gateway.model.dto.MemberIdRequest;
+import com.nhnacademy.gateway.model.domain.Project;
+import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
+import com.nhnacademy.gateway.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/task/{memberId}")
-public class TaskController {
+public class ProjectController {
 
     @Autowired
     private MemberNameAdaptor userNameAdaptor;
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping
-    public String getTask(Model model,
-                          @PathVariable("memberId") String memberId) {
+    public String getProjects(Model model,
+                              @PathVariable("memberId") String memberId) {
         ResponseUserNameDto response = userNameAdaptor.sendResponseUserNameDto(new MemberIdRequest(memberId));
 
         model.addAttribute("memberName", response.getUserName());
         model.addAttribute("memberId", memberId);
+
+        List<Project> projects = taskService.getProjectsByMemberId(new MemberIdRequest(memberId));
+        model.addAttribute("projects", projects);
 
         return "taskMainForm";
     }

@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.model.dto;
+package com.nhnacademy.gateway.model.request.member;
 
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class MemberRegisterRequest {
 
     @NonNull
     String memberId;

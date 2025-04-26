@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.common.validator;
 
-import com.nhnacademy.gateway.model.dto.RegisterRequest;
+import com.nhnacademy.gateway.model.request.member.MemberRegisterRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -9,7 +9,7 @@ public class RegisterValidator implements Validator{
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return RegisterRequest.class.equals(clazz);
+        return MemberRegisterRequest.class.equals(clazz);
     }
 
     @Override

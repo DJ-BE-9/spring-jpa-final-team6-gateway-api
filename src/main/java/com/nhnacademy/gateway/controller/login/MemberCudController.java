@@ -1,8 +1,7 @@
 package com.nhnacademy.gateway.controller.login;
 
 import com.nhnacademy.gateway.common.adaptor.login.MemberStatusAdaptor;
-import com.nhnacademy.gateway.exception.ResponseDtoException;
-import com.nhnacademy.gateway.model.dto.MemberCudRequest;
+import com.nhnacademy.gateway.model.request.member.MemberCudRequest;
 import com.nhnacademy.gateway.model.dto.ResponseDto;
 import com.nhnacademy.gateway.model.type.Cud;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Objects;
-
 @Controller
 public class MemberCudController {
 
     @Autowired
     private MemberStatusAdaptor memberStatusAdaptor;
 
-    @PostMapping("/task/{memberId}")
+    @PostMapping("/task/{memberId}/state")
     public String postMemberCud(@PathVariable("memberId") String memberId,
                                 @RequestParam("cud") Cud cud) {
 

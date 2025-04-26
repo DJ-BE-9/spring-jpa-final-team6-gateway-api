@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.common.adaptor.login;
 
-import com.nhnacademy.gateway.model.dto.RegisterRequest;
+import com.nhnacademy.gateway.model.request.member.MemberRegisterRequest;
 import com.nhnacademy.gateway.model.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -21,11 +21,11 @@ public class MemberRegisterAdaptor {
         restTemplate = new RestTemplate();
     }
 
-    public boolean sendRegisterRequest(RegisterRequest registerRequest) {
+    public boolean sendRegisterRequest(MemberRegisterRequest registerRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<RegisterRequest> requestHttpEntity = new HttpEntity<>(registerRequest, headers);
+        HttpEntity<MemberRegisterRequest> requestHttpEntity = new HttpEntity<>(registerRequest, headers);
 
         try {
             ResponseEntity<ResponseDto> response = restTemplate.postForEntity(REGISTER_API_URL, requestHttpEntity, ResponseDto.class);

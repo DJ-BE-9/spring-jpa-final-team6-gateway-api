@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.model.dto;
+package com.nhnacademy.gateway.model.request.member;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class MemberLoginRequest {
 
     @NonNull
     String memberId;

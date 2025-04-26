@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.common.advice;
 
+import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.exception.LoginProcessException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.exception.ResponseDtoException;
@@ -24,6 +25,11 @@ public class WebRestControllerAdvice {
 
     @ExceptionHandler(ResponseDtoException.class)
     public ResponseEntity<String> responseDtoException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EmptyRequestException.class)
+    public ResponseEntity<String> emptyRequestException(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

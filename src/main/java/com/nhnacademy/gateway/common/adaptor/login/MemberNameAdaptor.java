@@ -1,7 +1,7 @@
 package com.nhnacademy.gateway.common.adaptor.login;
 
 import com.nhnacademy.gateway.exception.ResponseDtoException;
-import com.nhnacademy.gateway.model.dto.MemberIdRequest;
+import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

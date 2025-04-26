@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.model.dto;
+package com.nhnacademy.gateway.model.request.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDto {
+public class MemberIdRequest {
 
-    String memberId;
-    String password;
+    private String memberId;
 
 }

@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth // 권한에 따른 접근 가능 페이지
-                        .requestMatchers("/task/**").authenticated()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/register").permitAll()
-                        //.anyRequest().permitAll()
+//                        .requestMatchers("/task/**").authenticated()
+//                                .requestMatchers("/").permitAll()
+//                                .requestMatchers("/register").permitAll()
+                        .anyRequest().permitAll()
                 )
 
                 .formLogin(form -> form // 로그인

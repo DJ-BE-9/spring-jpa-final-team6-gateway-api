@@ -3,7 +3,7 @@ package com.nhnacademy.gateway.controller.login;
 import com.nhnacademy.gateway.common.adaptor.login.MemberRegisterAdaptor;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.exception.ValidationFailedException;
-import com.nhnacademy.gateway.model.dto.RegisterRequest;
+import com.nhnacademy.gateway.model.request.member.MemberRegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +32,7 @@ public class MemberRegisterController {
     }
 
     @PostMapping
-    public String postRegister(@Validated @ModelAttribute RegisterRequest registerRequest,
+    public String postRegister(@Validated @ModelAttribute MemberRegisterRequest registerRequest,
                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
@@ -45,7 +45,6 @@ public class MemberRegisterController {
         if(!registerAdaptor.sendRegisterRequest(registerRequest)) {
             throw new RegisterProcessException("회원가입 실패했습니다.");
         }
-
 
         return "redirect:/login";
     }

@@ -1,8 +1,8 @@
 package com.nhnacademy.gateway.common.adaptor.login;
 
 import com.nhnacademy.gateway.exception.LoginProcessException;
-import com.nhnacademy.gateway.model.dto.LoginRequest;
-import com.nhnacademy.gateway.model.dto.LoginResponseDto;
+import com.nhnacademy.gateway.model.request.member.MemberLoginRequest;
+import com.nhnacademy.gateway.model.dto.ResponseLoginDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,14 @@ public class MemberLoginAdaptor {
         restTemplate = new RestTemplate();
     }
 
-    public LoginResponseDto sendLoginRequest(LoginRequest loginRequest) {
+    public ResponseLoginDto sendLoginRequest(MemberLoginRequest loginRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<LoginRequest> requestHttpEntity = new HttpEntity<>(loginRequest, headers);
+        HttpEntity<MemberLoginRequest> requestHttpEntity = new HttpEntity<>(loginRequest, headers);
 
         try {
-            ResponseEntity<LoginResponseDto> response = restTemplate.postForEntity(LOGIN_API_URL, requestHttpEntity, LoginResponseDto.class);
+            ResponseEntity<ResponseLoginDto> response = restTemplate.postForEntity(LOGIN_API_URL, requestHttpEntity, ResponseLoginDto.class);
 
             if(!response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
                 throw new LoginProcessException("로그인 실패");
