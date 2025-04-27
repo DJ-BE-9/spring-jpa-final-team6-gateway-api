@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/project/{memberId}")
+@RequestMapping("/member")
 @Slf4j
 public class ProjectController {
 
@@ -25,7 +25,7 @@ public class ProjectController {
 
     @GetMapping
     public String getProjects(Model model,
-                              @PathVariable("memberId") String memberId) {
+                              @RequestParam("memberId") String memberId) {
         ResponseUserNameDto response = userNameAdaptor.sendResponseUserNameDto(new MemberIdRequest(memberId));
         model.addAttribute("memberName", response.getUserName());
         model.addAttribute("memberId", memberId);

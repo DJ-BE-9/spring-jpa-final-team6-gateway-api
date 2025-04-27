@@ -75,7 +75,8 @@
       </select>
     </form>
 
-    <form th:action="@{/project/{memberId}/register(memberId=${memberId})}" method="get">
+    <form th:action="@{/project/register}" method="get">
+      <input type="hidden" name="memberId" th:value="${memberId}" />
       <button type="submit">프로젝트 생성</button>
     </form>
 
