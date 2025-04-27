@@ -6,6 +6,7 @@ import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
+import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,20 @@ public class ProjectService {
         return responseProjectsDto.getProjects();
     }
 
-    public void postProject(RegisterProjectRequest projectRequest) {
+    public Project postProject(RegisterProjectRequest projectRequest) {
         if(Objects.isNull(projectRequest)) {
             throw new EmptyRequestException("ProjectRequest 값을 받지 못했습니다");
         }
 
-        if(projectPostProjectAdaptor.sendProjectRegisterRequest(projectRequest)) {
+        return projectPostProjectAdaptor.sendProjectRegisterRequest(projectRequest);
 
+    }
+
+    public void registerProjectMember(Project project, RegisterProjectMemberRequest registerProjectMemberRequest) {
+        if(Objects.isNull(registerProjectMemberRequest) || Objects.isNull(project)) {
+            throw new EmptyRequestException("RegisterProjectMemberRequest 값을 받지 못했습니다.");
         }
-
+        projectPostProjectAdaptor.sendProjectMemberRegisterRequest(project, registerProjectMemberRequest);
     }
 
 }
