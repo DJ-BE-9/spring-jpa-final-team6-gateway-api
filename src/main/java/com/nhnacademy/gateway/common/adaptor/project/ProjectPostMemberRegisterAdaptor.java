@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ProjectPostMemberRegisterAdaptor {
-    private static final String REGISTER_MEMBER_URL = "http://localhost:7070/";
+    private static final String REGISTER_MEMBER_URL = "http://localhost:7070/project/";
 
     private RestTemplate restTemplate;
 
