@@ -1,17 +1,16 @@
-package com.nhnacademy.gateway.model.request.project;
+package com.nhnacademy.gateway.model.dto.tag;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterProjectMemberRequest {
-
-    private String userId;
-    private boolean projectManager;
-
+public class ResponseTagsDto {
+    private List<TagRegisterToProjectRequest> tags;
 }
