@@ -4,7 +4,7 @@ import com.nhnacademy.gateway.common.adaptor.login.MemberNameAdaptor;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import com.nhnacademy.gateway.model.dto.ResponseUserNameDto;
-import com.nhnacademy.gateway.service.TaskService;
+import com.nhnacademy.gateway.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class ProjectController {
     @Autowired
     private MemberNameAdaptor userNameAdaptor;
     @Autowired
-    private TaskService taskService;
+    private ProjectService projectService;
 
     @GetMapping
     public String getProjects(Model model,
@@ -30,7 +30,7 @@ public class ProjectController {
         model.addAttribute("memberName", response.getUserName());
         model.addAttribute("memberId", memberId);
 
-        List<Project> projects = taskService.getProjectsByMemberId(new MemberIdRequest(memberId));
+        List<Project> projects = projectService.getProjectsByMemberId(new MemberIdRequest(memberId));
         for(Project project : projects) {
             log.error("{}", project.getProjectName());
         }

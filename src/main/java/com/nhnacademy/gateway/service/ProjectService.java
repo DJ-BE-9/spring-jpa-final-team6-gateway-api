@@ -18,7 +18,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @Transactional
-public class TaskService {
+public class ProjectService {
 
     @Autowired
     private TaskGetProjectsAdaptor taskGetProjectsAdaptor;
