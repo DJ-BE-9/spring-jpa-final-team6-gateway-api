@@ -1,7 +1,5 @@
 package com.nhnacademy.gateway.controller.project;
 
-import com.nhnacademy.gateway.model.domain.Project;
-import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import com.nhnacademy.gateway.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;

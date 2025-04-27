@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseTagDto {
-//    private long projectId;
+    private long tagId;
     private String tagName;
 }

@@ -9,12 +9,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public class ProjectGetProjectDetailAdapter { // 프로젝트 상세 페이지
+public class ProjectGetProjectDetailAdaptor { // 프로젝트 상세 페이지
     private static final String PROJECT_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
-    public ProjectGetProjectDetailAdapter(RestTemplate restTemplate) {
+    public ProjectGetProjectDetailAdaptor(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

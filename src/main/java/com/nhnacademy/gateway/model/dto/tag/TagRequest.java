@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseTagsDto {
-    private List<ResponseTagDto> tagList;
+public class TagRequest {
+    private long projectId;
 }

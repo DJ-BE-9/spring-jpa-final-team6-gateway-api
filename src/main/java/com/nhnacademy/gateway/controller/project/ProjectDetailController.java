@@ -19,8 +19,6 @@ public class ProjectDetailController {
     @GetMapping
     public String getProjectDetail(@PathVariable("projectId") long projectId, Model model) {
         Project project = projectService.getProjectByProjectId(projectId);
-//        model.addAttribute("project", project.getProjectId());
-//        model.addAttribute("projectId", projectId);
         model.addAttribute("projectTitle", project.getProjectName());
         model.addAttribute("projectState", project.getProjectState());
 

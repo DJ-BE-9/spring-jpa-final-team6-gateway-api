@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 @RequestMapping("project/{projectId}/tag")
-public class ProjectTagRegisterController {
+public class TagsRegisterController {
 
 //    @PostMapping
 //    public
