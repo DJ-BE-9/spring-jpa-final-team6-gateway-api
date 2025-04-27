@@ -67,7 +67,7 @@
   <div class="header-left">내 프로젝트</div>
   <div class="header-right">
     <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님 </span>
-    <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
+    <form th:action="@{/member/{memberId}/state(memberId=${memberId})}" method="post">
       <select name="cud" onchange="this.form.submit()">
         <option value="JOIN">가입</option>
         <option value="DORMANT">휴면</option>
@@ -75,7 +75,7 @@
       </select>
     </form>
 
-    <form th:action="@{/project/{memberId}/register(memberId=${memberId})}" method="get">
+    <form th:action="@{/member/{memberId}/register(memberId=${memberId})}" method="get">
       <button type="submit">프로젝트 생성</button>
     </form>
 
@@ -87,10 +87,13 @@
 
 <div class="container">
   <div th:each="project : ${projects}" class="project-card">
-    <h3 th:text="${project.projectName}">프로젝트 이름</h3>
-    <p th:text="${project.projectState}">상태</p>
+    <a th:href="@{/project/{projectId}(projectId=${project.projectId})}" style="text-decoration: none; color: inherit;">
+      <h3 th:text="${project.projectName}">프로젝트 이름</h3>
+      <p th:text="${project.projectState}">상태</p>
+    </a>
   </div>
 </div>
 
 </body>
 </html>
+

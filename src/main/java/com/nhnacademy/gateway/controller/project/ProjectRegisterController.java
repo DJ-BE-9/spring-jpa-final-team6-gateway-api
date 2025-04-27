@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/project/{memberId}/register")
+@RequestMapping("/member/{memberId}/project/register")
 public class ProjectRegisterController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class ProjectRegisterController {
 
         model.addAttribute("memberId", memberId);
 
-        return "ProjectRegisterForm";
+        return "projectRegisterForm";
     }
 
     @PostMapping
@@ -29,7 +29,7 @@ public class ProjectRegisterController {
 
         projectService.postProject(projectRequest);
 
-        return "redirect:/project/" + memberId;
+        return "redirect:/member/" + memberId + "/project/register";
     }
 
 }
