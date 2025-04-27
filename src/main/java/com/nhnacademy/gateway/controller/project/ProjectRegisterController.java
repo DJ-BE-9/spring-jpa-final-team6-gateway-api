@@ -1,5 +1,7 @@
 package com.nhnacademy.gateway.controller.project;
 
+import com.nhnacademy.gateway.model.domain.Project;
+import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import com.nhnacademy.gateway.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +30,12 @@ public class ProjectRegisterController {
     @PostMapping
     public String postProject(@RequestParam("memberId") String memberId,
                               @ModelAttribute RegisterProjectRequest projectRequest) {
+        log.info("{}, {}",projectRequest.getProjectName(), projectRequest.getProjectState());
+        Project newProject = projectService.postProject(projectRequest);
+        RegisterProjectMemberRequest registerProjectMemberRequest = new RegisterProjectMemberRequest(memberId, true);
+        projectService.registerProjectMember(newProject, registerProjectMemberRequest);
 
-        projectService.postProject(projectRequest);
-
-        return "redirect:/member/" + memberId;
+        return "redirect:/member?memberId=" + memberId;
     }
 
 }
