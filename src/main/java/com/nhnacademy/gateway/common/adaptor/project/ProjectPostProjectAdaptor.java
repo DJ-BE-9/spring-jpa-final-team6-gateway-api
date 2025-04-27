@@ -14,12 +14,12 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class TaskPostProjectAdaptor {
+public class ProjectPostProjectAdaptor {
     private static final String PROJECT_API_URL = "http://localhost:7070/project";
 
     private RestTemplate restTemplate;
 
-    public TaskPostProjectAdaptor() {
+    public ProjectPostProjectAdaptor() {
         this.restTemplate = new RestTemplate();
     }
 

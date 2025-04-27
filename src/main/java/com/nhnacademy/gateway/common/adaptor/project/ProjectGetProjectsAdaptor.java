@@ -16,12 +16,12 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class TaskGetProjectsAdaptor {
+public class ProjectGetProjectsAdaptor {
     private static final String PROJECT_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
-    public TaskGetProjectsAdaptor(RestTemplate restTemplate) {
+    public ProjectGetProjectsAdaptor(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -37,8 +37,8 @@ public class TaskGetProjectsAdaptor {
             }
 
             return response.getBody();
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
+            log.error("try-catch: {}", e, e);
             throw new ResponseDtoException("Project 리스트를 가져오지 못했습니다.");
         }
     }

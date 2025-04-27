@@ -36,7 +36,7 @@ public class ProjectController {
         }
         model.addAttribute("projects", projects);
 
-        return "taskMainForm";
+        return "ProjectMainForm";
     }
 
 }

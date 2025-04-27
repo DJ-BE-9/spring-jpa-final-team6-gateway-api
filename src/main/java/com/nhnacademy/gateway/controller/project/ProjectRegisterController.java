@@ -20,7 +20,7 @@ public class ProjectRegisterController {
 
         model.addAttribute("memberId", memberId);
 
-        return "taskRegisterForm";
+        return "ProjectRegisterForm";
     }
 
     @PostMapping
