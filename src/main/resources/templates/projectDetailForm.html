@@ -4,27 +4,85 @@
     <meta charset="UTF-8">
     <title>내 프로젝트</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
-        header { background-color: #4a90e2; padding: 1rem 2rem; color: white; font-size: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .container { padding: 2rem; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4a90e2;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        select {
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: none;
+        }
+        button {
+            background-color: white;
+            color: #4a90e2;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+
         .filter-bar { background: white; padding: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; }
         .project-title { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
         .plus-box { width: 150px; height: 150px; background: white; border: 2px solid #4a90e2; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
+
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
+        .modal-content h2 { margin-top: 0; }
+        .item { display: flex; align-items: center; margin-bottom: 0.5rem; }
+        .item input { margin-right: 0.5rem; flex: 1; }
+        .item button { margin-left: 0.2rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <div>내 프로젝트</div>
-    <div>
-        <span th:text="${memberName}">test1</span> 님
-        <select>
-            <option>가입</option>
-            <option>휴면</option>
-            <option>탈퇴</option>
-        </select>
-        <button>프로젝트 생성</button>
-        <button>로그아웃</button>
+    <div class="header-left">내 프로젝트</div>
+    <div class="header-right">
+        <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님 </span>
+        <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
+            <select name="cud" onchange="this.form.submit()">
+                <option value="JOIN">가입</option>
+                <option value="DORMANT">휴면</option>
+                <option value="WITHDRAWAL">탈퇴</option>
+            </select>
+        </form>
+
+        <form th:action="@{/project/register}" method="get">
+            <input type="hidden" name="memberId" th:value="${memberId}" />
+            <button type="submit">프로젝트 생성</button>
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
     </div>
 </header>
 
@@ -33,62 +91,196 @@
 
     <div class="filter-bar">
         <label>태그:
-            <select id="tagSelect" onchange="onTagSelect()">
-                <option value="">전체</option>
-                <option value="tag1">태그1</option>
-                <option value="tag2">태그2</option>
-                <option value="new">+ 새 태그 등록</option> <!-- 새 태그 등록용 옵션 -->
+            <select onclick="openModal('tagModal')">
+                <option>전체</option>
             </select>
         </label>
         <label>마일스톤:
-            <select>
+            <select onclick="openModal('milestoneModal')">
                 <option>전체</option>
             </select>
         </label>
     </div>
 
-    <!-- 숨겨진 태그 등록 폼 -->
-    <div id="tagRegisterSection" class="tag-register-section">
-        <input type="text" id="newTagName" placeholder="새 태그 입력">
-        <button onclick="registerNewTag()">등록</button>
-    </div>
-
-    <!-- 태그 리스트 -->
-    <div id="tagList" style="margin-top: 2rem;">
-        <!-- 새로 등록된 태그 리스트 표시할 부분 -->
-    </div>
-
-    <!-- 프로젝트 안의 + 버튼 (task 추가 등) -->
     <div class="plus-box">
         +
     </div>
 </div>
 
-<script>
-    function onTagSelect() {
-        const select = document.getElementById('tagSelect');
-        const selectedValue = select.value;
+<!-- 태그 모달 -->
+<div id="tagModal" class="modal">
+    <div class="modal-content">
+        <h2>태그 관리</h2>
+        <div id="tagList"></div>
+        <button onclick="addItem('tag')">+ 새 태그 추가</button>
+        <button onclick="closeModal('tagModal')">닫기</button>
+    </div>
+</div>
 
-        if (selectedValue === 'new') {
-            document.getElementById('tagRegisterSection').style.display = 'block';
-        } else {
-            document.getElementById('tagRegisterSection').style.display = 'none';
-        }
+<!-- 마일스톤 모달 -->
+<div id="milestoneModal" class="modal">
+    <div class="modal-content">
+        <h2>마일스톤 관리</h2>
+
+        <div style="margin-bottom: 1rem;">
+            <input type="text" id="milestoneName" placeholder="마일스톤 이름 입력" required>
+
+            <div style="margin-top: 0.5rem;">
+                기간
+                <label><input type="radio" name="milestonePeriod" value="none" checked onchange="togglePeriodInput()"> 없음</label>
+                <label><input type="radio" name="milestonePeriod" value="set" onchange="togglePeriodInput()"> 있음</label>
+            </div>
+
+            <div id="periodInputs" style="display: none; margin-top: 0.5rem;">
+                <input type="date" id="startDate">
+                ~
+                <input type="date" id="endDate">
+            </div>
+
+            <button onclick="addMilestone()">+ 새 마일스톤 추가</button>
+        </div>
+
+        <div id="milestoneList"></div>
+
+        <button onclick="closeModal('milestoneModal')">닫기</button>
+    </div>
+</div>
+
+<script>
+    function openModal(id) {
+        document.getElementById(id).style.display = 'block';
     }
 
-    function registerNewTag() {
-        const tagName = document.getElementById('newTagName').value.trim();
-        if (!tagName) {
-            alert('태그 이름을 입력하세요.');
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function addItem(type) {
+        const listId = type === 'tag' ? 'tagList' : 'milestoneList';
+        const list = document.getElementById(listId);
+
+        const div = document.createElement('div');
+        div.className = 'item';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = type === 'tag' ? '새 태그 입력' : '새 마일스톤 입력';
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = '저장';
+        saveButton.onclick = function() {
+            if (input.value.trim() !== '') {
+                input.disabled = true;
+                saveButton.style.display = 'none';
+            } else {
+                alert('값을 입력하세요.');
+            }
+        };
+
+        const editButton = document.createElement('button');
+        editButton.textContent = '수정';
+        editButton.onclick = function() {
+            input.disabled = false;
+            saveButton.style.display = 'inline';
+        };
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '삭제';
+        deleteButton.onclick = function() {
+            list.removeChild(div);
+        };
+
+        div.appendChild(input);
+        div.appendChild(saveButton);
+        div.appendChild(editButton);
+        div.appendChild(deleteButton);
+
+        list.appendChild(div);
+    }
+</script><script>
+    function togglePeriodInput() {
+        const selected = document.querySelector('input[name="milestonePeriod"]:checked').value;
+        document.getElementById('periodInputs').style.display = selected === 'set' ? 'block' : 'none';
+    }
+
+    function addMilestone() {
+        const nameInput = document.getElementById('milestoneName');
+        const startInput = document.getElementById('startDate');
+        const endInput = document.getElementById('endDate');
+        const selectedPeriod = document.querySelector('input[name="milestonePeriod"]:checked').value;
+
+        const name = nameInput.value.trim();
+        if (!name) {
+            alert('마일스톤 이름을 입력하세요.');
             return;
         }
 
-        const tagList = document.getElementById('tagList');
-        const newTag = document.createElement('div');
-        newTag.textContent = tagName;
-        tagList.appendChild(newTag);
+        const milestoneList = document.getElementById('milestoneList');
+        const div = document.createElement('div');
+        div.className = 'item';
 
-        document.getElementById('newTagName').value = '';
+        const info = document.createElement('div');
+        info.style.flex = '1';
+        info.style.display = 'flex';
+        info.style.flexDirection = 'column';
+        info.style.gap = '0.3rem';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = name;
+
+        const dateSpan = document.createElement('span');
+        if (selectedPeriod === 'set' && startInput.value && endInput.value) {
+            dateSpan.textContent = `${startInput.value} ~ ${endInput.value}`;
+        }
+
+        info.appendChild(nameSpan);
+        if (dateSpan.textContent) {
+            info.appendChild(dateSpan);
+        }
+
+        const editButton = document.createElement('button');
+        editButton.textContent = '수정';
+        editButton.style.color = 'blue';
+        editButton.style.background = 'none';
+        editButton.style.border = 'none';
+        editButton.style.cursor = 'pointer';
+        editButton.onclick = function() {
+            nameInput.value = nameSpan.textContent;
+            if (dateSpan.textContent) {
+                const [start, end] = dateSpan.textContent.split(' ~ ');
+                document.getElementById('startDate').value = start;
+                document.getElementById('endDate').value = end;
+                document.querySelector('input[value="set"]').checked = true;
+                togglePeriodInput();
+            } else {
+                document.querySelector('input[value="none"]').checked = true;
+                togglePeriodInput();
+            }
+            milestoneList.removeChild(div);
+        };
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '삭제';
+        deleteButton.style.color = 'blue';
+        deleteButton.style.background = 'none';
+        deleteButton.style.border = 'none';
+        deleteButton.style.cursor = 'pointer';
+        deleteButton.onclick = function() {
+            milestoneList.removeChild(div);
+        };
+
+        div.appendChild(info);
+        div.appendChild(editButton);
+        div.appendChild(deleteButton);
+
+        milestoneList.appendChild(div);
+
+        // 초기화
+        nameInput.value = '';
+        startInput.value = '';
+        endInput.value = '';
+        document.querySelector('input[value="none"]').checked = true;
+        togglePeriodInput();
     }
 </script>
 
