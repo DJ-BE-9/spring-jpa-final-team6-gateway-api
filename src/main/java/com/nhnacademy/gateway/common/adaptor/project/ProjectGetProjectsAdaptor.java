@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 public class ProjectGetProjectsAdaptor {
-    private static final String PROJECT_API_URL = "http://localhost:7070/member/";
+    private static final String PROJECT_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
@@ -28,7 +28,8 @@ public class ProjectGetProjectsAdaptor {
     public ResponseProjectsDto sendAndGetProjects(MemberIdRequest memberIdRequest) {
 
         try {
-            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(PROJECT_API_URL + memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            ResponseEntity<ResponseProjectsDto> response = restTemplate.getForEntity(PROJECT_API_URL  +"members/"+ memberIdRequest.getMemberId(), ResponseProjectsDto.class);
+            log.error("{}", response.getBody());
             List<Project> projects = response.getBody().getProjects();
             projects.forEach(project -> {log.info("{}", project.getProjectName());});
             if (!response.getStatusCode().is2xxSuccessful()) {

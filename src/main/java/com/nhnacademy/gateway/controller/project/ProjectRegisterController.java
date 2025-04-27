@@ -2,13 +2,15 @@ package com.nhnacademy.gateway.controller.project;
 
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import com.nhnacademy.gateway.service.ProjectService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/member/{memberId}/project/register")
+@RequestMapping("/project/register")
+@Slf4j
 public class ProjectRegisterController {
 
     @Autowired
@@ -16,20 +18,20 @@ public class ProjectRegisterController {
 
     @GetMapping
     public String getProjectRegister(Model model,
-                                     @PathVariable("memberId") String memberId) {
-
+                                     @RequestParam("memberId") String memberId) {
+        log.error("{}",memberId);
         model.addAttribute("memberId", memberId);
 
-        return "projectRegisterForm";
+        return "ProjectRegisterForm";
     }
 
     @PostMapping
-    public String postProject(@PathVariable("memberId") String memberId,
+    public String postProject(@RequestParam("memberId") String memberId,
                               @ModelAttribute RegisterProjectRequest projectRequest) {
 
         projectService.postProject(projectRequest);
 
-        return "redirect:/member/" + memberId + "/project/register";
+        return "redirect:/member/" + memberId;
     }
 
 }

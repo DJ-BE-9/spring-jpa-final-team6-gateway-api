@@ -68,27 +68,27 @@
 <body>
 <div class="container">
   <h2>프로젝트 생성</h2>
-  <form th:action="@{/member/{memberId}/register(memberId=${memberId})}" method="post">
+  <form th:action="@{/project/register(memberId=${memberId})}" method="post">
     <div class="form-group">
       <label for="name">프로젝트 이름</label>
       <input type="text" id="name" name="projectName" class="form-control" placeholder="예: Team A Management" required>
     </div>
 
-<!--    <div class="form-group">-->
-<!--      <label for="status">프로젝트 상태</label>-->
-<!--      <select id="status" name="projectState" class="form-control" required>-->
-<!--        <option value="ACTIVE">활성</option>-->
-<!--        <option value="DORMANT">휴면</option>-->
-<!--        <option value="CLOSED">종료</option>-->
-<!--      </select>-->
-<!--    </div>-->
+    <div class="form-group">
+      <label for="status">프로젝트 상태</label>
+      <select id="status" name="projectState" class="form-control" required>
+        <option value="ACTIVE">활성</option>
+        <option value="DORMANT">휴면</option>
+        <option value="CLOSED">종료</option>
+      </select>
+    </div>
 
     <div class="form-group">
       <button type="submit" class="btn">생성하기</button>
     </div>
 
     <div class="bottom-link">
-      <a th:href="@{/member/{memberId}/register(memberId=${memberId})}">내 프로젝트로 돌아가기</a>
+      <a th:href="@{/member(memberId=${memberId})}">내 프로젝트로 돌아가기</a>
     </div>
   </form>
 </div>

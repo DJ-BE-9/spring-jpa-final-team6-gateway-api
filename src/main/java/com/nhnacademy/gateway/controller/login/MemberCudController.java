@@ -16,7 +16,7 @@ public class MemberCudController {
     @Autowired
     private MemberStatusAdaptor memberStatusAdaptor;
 
-    @PostMapping("/member/{memberId}/state")
+    @PostMapping("/project/{memberId}/state")
     public String postMemberCud(@PathVariable("memberId") String memberId,
                                 @RequestParam("cud") Cud cud) {
 
