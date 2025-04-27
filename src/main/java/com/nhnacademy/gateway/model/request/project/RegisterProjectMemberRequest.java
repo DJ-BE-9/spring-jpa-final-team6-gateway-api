@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisterProjectMemberRequest {
 
-    private boolean projectManager;
     private String userId;
+    private boolean projectManager;
 
 }

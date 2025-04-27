@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseTagsDto {
-    private List<ResponseTagDto> tagList;
+public class ResponseGetTagsDto {
+    private List<ResponseGetTagDto> tagList;
 }

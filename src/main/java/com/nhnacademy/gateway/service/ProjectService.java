@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectDetailAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectDetailAdapter;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectPostMemberRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
@@ -32,9 +32,7 @@ public class ProjectService {
     @Autowired
     private ProjectPostMemberRegisterAdaptor projectPostMemberRegisterAdaptor;
     @Autowired
-    private ProjectPostRegisterAdaptor projectPostRegisterAdaptor;
-    @Autowired
-    private ProjectGetProjectDetailAdaptor projectGetProjectDetailAdaptor;
+    private ProjectGetProjectDetailAdapter projectGetProjectDetailAdapter;
 
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
@@ -53,8 +51,8 @@ public class ProjectService {
         }
 
         long projectId = projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId);
-
-        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(true, memberId))) {
+        log.info("{}", projectId);
+        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(memberId, true))) {
             throw new MemberRegisterProcessException("Project Member 등록하지 못했습니다.");
         }
 
@@ -64,7 +62,7 @@ public class ProjectService {
         if(Objects.isNull(projectId)) {
             throw new EmptyRequestException("ProjectId 값을 받지 못했습니다.");
         }
-        ResponseProjectDto responseProjectDto = projectGetProjectDetailAdaptor.sendAndGetProject(projectId);
+        ResponseProjectDto responseProjectDto = projectGetProjectDetailAdapter.sendAndGetProject(projectId);
         return new Project(
                 responseProjectDto.getProjectId(),
                 responseProjectDto.getProjectName(),

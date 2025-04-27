@@ -1,10 +1,12 @@
 package com.nhnacademy.gateway.controller.tag;
 
-import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponsePostTagDto;
+import com.nhnacademy.gateway.model.dto.tag.TagRegisterToProjectRequest;
 import com.nhnacademy.gateway.model.dto.tag.TagRequest;
 import com.nhnacademy.gateway.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +20,16 @@ public class TagController {
 
     //프로젝트 관련 테그 get
     @GetMapping
-    public List<ResponseTagDto> getTags(@PathVariable("projectId") long projectId) {
+    public List<ResponseGetTagDto> getTags(@PathVariable("projectId") long projectId) {
         return tagService.getTagsByProjectId(new TagRequest(projectId));
     }
 
+    //프로젝트에 태그 등록하기
+    @PostMapping
+    public ResponseEntity<ResponsePostTagDto> createTag(@RequestBody TagRegisterToProjectRequest tagRegisterToProjectRequest,
+                                                       @PathVariable("projectId") long projectId) {
+        ResponsePostTagDto responsePostTagDto = tagService.registerTag()
+    }
 
-
-
-
+ //TODO 태그 등록 하기
 }

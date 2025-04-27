@@ -28,6 +28,7 @@ public class ProjectRegisterController {
     @PostMapping
     public String postProject(@RequestParam("memberId") String memberId,
                               @ModelAttribute RegisterProjectRequest projectRequest) {
+        log.info("{}", memberId);
         projectService.postProject(projectRequest, memberId);
         return "redirect:/member?memberId=" + memberId;
     }
