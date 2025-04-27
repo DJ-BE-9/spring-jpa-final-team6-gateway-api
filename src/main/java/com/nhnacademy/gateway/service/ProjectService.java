@@ -1,11 +1,14 @@
 package com.nhnacademy.gateway.service;
 
 import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostMemberRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
+import com.nhnacademy.gateway.exception.MemberRegisterProcessException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
+import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,10 @@ public class ProjectService {
     private ProjectGetProjectsAdaptor projectGetProjectsAdaptor;
     @Autowired
     private ProjectPostRegisterAdaptor projectPostProjectAdaptor;
+    @Autowired
+    private ProjectPostMemberRegisterAdaptor projectPostMemberRegisterAdaptor;
+    @Autowired
+    private ProjectPostRegisterAdaptor projectPostRegisterAdaptor;
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
         if(Objects.isNull(memberIdRequest) || Objects.isNull(memberIdRequest.getMemberId()) || memberIdRequest.getMemberId().isEmpty()) {
@@ -40,8 +47,10 @@ public class ProjectService {
             throw new EmptyRequestException("ProjectRequest 값을 받지 못했습니다");
         }
 
-        if(projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId)) {
+        long projectId = projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId);
 
+        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(true, memberId))) {
+            throw new MemberRegisterProcessException("Project Member 등록하지 못했습니다.");
         }
 
     }
