@@ -10,7 +10,7 @@ public class MemberLoginController {
 
     @GetMapping
     public String getLogin() {
-        return "loginForm";
+        return "memberLoginForm";
     }
 
 }

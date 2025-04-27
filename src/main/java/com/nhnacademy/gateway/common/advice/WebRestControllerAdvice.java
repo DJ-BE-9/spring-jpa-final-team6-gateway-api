@@ -1,9 +1,6 @@
 package com.nhnacademy.gateway.common.advice;
 
-import com.nhnacademy.gateway.exception.EmptyRequestException;
-import com.nhnacademy.gateway.exception.LoginProcessException;
-import com.nhnacademy.gateway.exception.RegisterProcessException;
-import com.nhnacademy.gateway.exception.ResponseDtoException;
+import com.nhnacademy.gateway.exception.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +27,11 @@ public class WebRestControllerAdvice {
 
     @ExceptionHandler(EmptyRequestException.class)
     public ResponseEntity<String> emptyRequestException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MemberRegisterProcessException.class)
+    public ResponseEntity<String> memberRegisterProcessException(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

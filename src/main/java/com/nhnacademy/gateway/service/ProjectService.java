@@ -1,9 +1,13 @@
 package com.nhnacademy.gateway.service;
 
+import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectDetailAdapter;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
-import com.nhnacademy.gateway.common.adaptor.project.ProjectPostProjectAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostMemberRegisterAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
+import com.nhnacademy.gateway.exception.MemberRegisterProcessException;
 import com.nhnacademy.gateway.model.domain.Project;
+import com.nhnacademy.gateway.model.dto.ResponseProjectDto;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
@@ -24,7 +28,14 @@ public class ProjectService {
     @Autowired
     private ProjectGetProjectsAdaptor projectGetProjectsAdaptor;
     @Autowired
-    private ProjectPostProjectAdaptor projectPostProjectAdaptor;
+    private ProjectPostRegisterAdaptor projectPostProjectAdaptor;
+    @Autowired
+    private ProjectPostMemberRegisterAdaptor projectPostMemberRegisterAdaptor;
+    @Autowired
+    private ProjectPostRegisterAdaptor projectPostRegisterAdaptor;
+    @Autowired
+    private ProjectGetProjectDetailAdapter projectGetProjectDetailAdapter;
+
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
         if(Objects.isNull(memberIdRequest) || Objects.isNull(memberIdRequest.getMemberId()) || memberIdRequest.getMemberId().isEmpty()) {
@@ -36,20 +47,29 @@ public class ProjectService {
         return responseProjectsDto.getProjects();
     }
 
-    public Project postProject(RegisterProjectRequest projectRequest) {
+    public void postProject(RegisterProjectRequest projectRequest, String memberId) {
         if(Objects.isNull(projectRequest)) {
             throw new EmptyRequestException("ProjectRequest 값을 받지 못했습니다");
         }
 
-        return projectPostProjectAdaptor.sendProjectRegisterRequest(projectRequest);
+        long projectId = projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId);
+
+        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(true, memberId))) {
+            throw new MemberRegisterProcessException("Project Member 등록하지 못했습니다.");
+        }
 
     }
 
-    public void registerProjectMember(Project project, RegisterProjectMemberRequest registerProjectMemberRequest) {
-        if(Objects.isNull(registerProjectMemberRequest) || Objects.isNull(project)) {
-            throw new EmptyRequestException("RegisterProjectMemberRequest 값을 받지 못했습니다.");
+    public Project getProjectByProjectId(Long projectId) {
+        if(Objects.isNull(projectId)) {
+            throw new EmptyRequestException("ProjectId 값을 받지 못했습니다.");
         }
-        projectPostProjectAdaptor.sendProjectMemberRegisterRequest(project, registerProjectMemberRequest);
+        ResponseProjectDto responseProjectDto = projectGetProjectDetailAdapter.sendAndGetProject(projectId);
+        return new Project(
+                responseProjectDto.getProjectId(),
+                responseProjectDto.getProjectName(),
+                responseProjectDto.getProjectState()
+        );
     }
 
 }

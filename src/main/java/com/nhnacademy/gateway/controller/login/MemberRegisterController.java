@@ -28,7 +28,7 @@ public class MemberRegisterController {
 
     @GetMapping
     public String getRegister() {
-        return "registerForm";
+        return "memberRegisterForm";
     }
 
     @PostMapping
