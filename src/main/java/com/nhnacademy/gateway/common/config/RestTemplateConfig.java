@@ -1,7 +1,6 @@
 package com.nhnacademy.gateway.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -14,7 +13,6 @@ public class RestTemplateConfig {
     private final ObjectMapper objectMapper;
 
     public RestTemplateConfig(ObjectMapper objectMapper) {
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         this.objectMapper = objectMapper;
     }
 
