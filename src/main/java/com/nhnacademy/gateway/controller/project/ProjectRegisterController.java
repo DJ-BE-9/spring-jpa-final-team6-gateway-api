@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.controller.project;
 
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import com.nhnacademy.gateway.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +15,23 @@ public class ProjectRegisterController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private ProjectPostRegisterAdaptor registerAdaptor;
+
     @GetMapping
     public String getProjectRegister(Model model,
                                      @PathVariable("memberId") String memberId) {
 
         model.addAttribute("memberId", memberId);
 
-        return "ProjectRegisterForm";
+        return "projectRegisterForm";
     }
 
     @PostMapping
     public String postProject(@PathVariable("memberId") String memberId,
                               @ModelAttribute RegisterProjectRequest projectRequest) {
 
-        projectService.postProject(projectRequest);
+        projectService.postProject(projectRequest, memberId);
 
         return "redirect:/project/" + memberId;
     }

@@ -1,7 +1,7 @@
 package com.nhnacademy.gateway.service;
 
 import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
-import com.nhnacademy.gateway.common.adaptor.project.ProjectPostProjectAdaptor;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
@@ -23,7 +23,7 @@ public class ProjectService {
     @Autowired
     private ProjectGetProjectsAdaptor projectGetProjectsAdaptor;
     @Autowired
-    private ProjectPostProjectAdaptor projectPostProjectAdaptor;
+    private ProjectPostRegisterAdaptor projectPostProjectAdaptor;
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
         if(Objects.isNull(memberIdRequest) || Objects.isNull(memberIdRequest.getMemberId()) || memberIdRequest.getMemberId().isEmpty()) {
@@ -35,12 +35,12 @@ public class ProjectService {
         return responseProjectsDto.getProjects();
     }
 
-    public void postProject(RegisterProjectRequest projectRequest) {
+    public void postProject(RegisterProjectRequest projectRequest, String memberId) {
         if(Objects.isNull(projectRequest)) {
             throw new EmptyRequestException("ProjectRequest 값을 받지 못했습니다");
         }
 
-        if(projectPostProjectAdaptor.sendProjectRegisterRequest(projectRequest)) {
+        if(projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId)) {
 
         }
 
