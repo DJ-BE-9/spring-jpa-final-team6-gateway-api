@@ -32,8 +32,6 @@ public class ProjectService {
     @Autowired
     private ProjectPostMemberRegisterAdaptor projectPostMemberRegisterAdaptor;
     @Autowired
-    private ProjectPostRegisterAdaptor projectPostRegisterAdaptor;
-    @Autowired
     private ProjectGetProjectDetailAdapter projectGetProjectDetailAdapter;
 
 
@@ -53,8 +51,8 @@ public class ProjectService {
         }
 
         long projectId = projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId);
-
-        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(true, memberId))) {
+        log.info("{}", projectId);
+        if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(memberId, true))) {
             throw new MemberRegisterProcessException("Project Member 등록하지 못했습니다.");
         }
 
