@@ -190,7 +190,14 @@
                 </div>
                 <div>
                     <strong>태그:</strong>
-                    <span th:text="${task.tag != null ? task.tag.tagName() : '없음'}">태그 이름</span>
+                    <div th:if="${task.tag != null}">
+                        <ul style="padding-left: 1rem; margin: 0;">
+                            <li th:each="tagItem : ${task.tag.tagList}" th:text="${tagItem.tagName}">태그 이름</li>
+                        </ul>
+                    </div>
+                    <div th:if="${task.tag == null}">
+                        없음
+                    </div>
                 </div>
             </div>
         </div>
