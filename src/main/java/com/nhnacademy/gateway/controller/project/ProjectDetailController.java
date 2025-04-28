@@ -5,6 +5,7 @@ import com.nhnacademy.gateway.common.adaptor.project.ProjectPostProjectStateAdap
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseDto;
 import com.nhnacademy.gateway.model.dto.ResponseProjectDto;
+import com.nhnacademy.gateway.model.dto.task.ResponseTaskDetailDto;
 import com.nhnacademy.gateway.model.request.member.MemberCudRequest;
 import com.nhnacademy.gateway.model.request.project.ProjectIdRequest;
 import com.nhnacademy.gateway.model.request.project.ProjectMember;
@@ -12,6 +13,7 @@ import com.nhnacademy.gateway.model.request.project.ProjectStateRequest;
 import com.nhnacademy.gateway.model.type.Cud;
 import com.nhnacademy.gateway.model.type.State;
 import com.nhnacademy.gateway.service.ProjectService;
+import com.nhnacademy.gateway.service.TaskService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,9 @@ public class ProjectDetailController {
     private TaskService taskService;
 
     @GetMapping
-    public String getProjectDetail(@PathVariable("projectId") long projectId, Model model) {
+    public String getProjectDetail(@PathVariable("projectId") long projectId, Model model,
+                                   HttpServletRequest request) {
         Project project = projectService.getProjectByProjectId(projectId);
-//        model.addAttribute("project", project.getProjectId());
-//        model.addAttribute("projectId", projectId);
         model.addAttribute("projectTitle", project.getProjectName());
         model.addAttribute("projectState", project.getProjectState());
 
