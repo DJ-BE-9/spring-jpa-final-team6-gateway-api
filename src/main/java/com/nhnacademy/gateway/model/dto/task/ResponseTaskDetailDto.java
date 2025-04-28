@@ -2,6 +2,7 @@ package com.nhnacademy.gateway.model.dto.task;
 
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseTagListByTaskDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,5 @@ public class ResponseTaskDetailDto {
     private String taskTitle;
     private String taskDescription;
     private ResponseMilestoneDto milestone;
-    private ResponseTagDto tag;
+    private ResponseTagListByTaskDto tag;
 }
