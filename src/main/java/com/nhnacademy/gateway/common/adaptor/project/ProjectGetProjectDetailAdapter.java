@@ -23,7 +23,6 @@ public class ProjectGetProjectDetailAdapter { // 프로젝트 상세 페이지
 
         try {
             String url = PROJECT_API_URL + projectId;
-            log.info(url);
             ResponseEntity<ResponseProjectDto> response = restTemplate.getForEntity(url, ResponseProjectDto.class);
 
             if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {

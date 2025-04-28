@@ -24,7 +24,7 @@ public class ProjectPostMemberRegisterAdaptor {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RegisterProjectMemberRequest> requestHttpEntity = new HttpEntity<>(registerProjectMemberRequest, headers);
-        log.info("{}", registerProjectMemberRequest.getUserId());
+        log.info("{}", registerProjectMemberRequest.getMemberId());
         try {
             String url = REGISTER_MEMBER_URL + projectId + "/members";
             ResponseEntity<ResponseDto> response = restTemplate.postForEntity(url, requestHttpEntity, ResponseDto.class);

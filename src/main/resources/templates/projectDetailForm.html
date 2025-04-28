@@ -7,7 +7,26 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
         header { background-color: #4a90e2; padding: 1rem 2rem; color: white; font-size: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
         .container { padding: 2rem; }
-        .filter-bar { background: white; padding: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; }
+        .filter-bar {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            position: relative; /* 상대 위치 설정 */
+        }
+        .filter-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .filter-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: absolute;
+            right: 1rem; /* 오른쪽 끝에 딱 붙게 */
+        }
         .project-title { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
         .plus-box { width: 150px; height: 150px; background: white; border: 2px solid #4a90e2; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
     </style>
@@ -32,19 +51,28 @@
     <div class="project-title" th:text="${projectTitle}">프로젝트 Title</div>
 
     <div class="filter-bar">
-        <label>태그:
-            <select id="tagSelect" onchange="onTagSelect()">
-                <option value="">전체</option>
-                <option value="tag1">태그1</option>
-                <option value="tag2">태그2</option>
-                <option value="new">+ 새 태그 등록</option> <!-- 새 태그 등록용 옵션 -->
-            </select>
-        </label>
-        <label>마일스톤:
-            <select>
-                <option>전체</option>
-            </select>
-        </label>
+        <!-- 왼쪽: 태그, 마일스톤 -->
+        <div class="filter-left">
+            <label>태그:
+                <select id="tagSelect" onchange="onTagSelect()">
+                    <option value="">전체</option>
+                    <option value="tag1">태그1</option>
+                    <option value="tag2">태그2</option>
+                    <option value="new">+ 새 태그 등록</option> <!-- 새 태그 등록용 옵션 -->
+                </select>
+            </label>
+            <label>마일스톤:
+                <select>
+                    <option>전체</option>
+                </select>
+            </label>
+        </div>
+
+        <!-- 오른쪽: 팀원 추가 -->
+        <form class="filter-right" th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
+            <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
+            <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
+        </form>
     </div>
 
     <!-- 숨겨진 태그 등록 폼 -->
@@ -62,6 +90,7 @@
     <div class="plus-box">
         +
     </div>
+
 </div>
 
 <script>

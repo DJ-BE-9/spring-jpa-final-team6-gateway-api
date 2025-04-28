@@ -14,7 +14,6 @@ public class RestTemplateConfig {
     private final ObjectMapper objectMapper;
 
     public RestTemplateConfig(ObjectMapper objectMapper) {
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         this.objectMapper = objectMapper;
     }
 

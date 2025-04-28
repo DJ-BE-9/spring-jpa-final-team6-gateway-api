@@ -15,10 +15,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                                         HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
 
-        // String userId = request.getParameter("id");
-
-
-
         response.sendRedirect("/login");
     }
 
