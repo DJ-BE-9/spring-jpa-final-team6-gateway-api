@@ -181,24 +181,28 @@
 
         </div>
         <div class="task-list">
-            <div th:each="task : ${taskList}" class="task-card">
-                <h3 th:text="${task.taskTitle}">태스크 제목</h3>
-                <p th:text="${task.taskDescription}">태스크 설명</p>
-                <div>
-                    <strong>마일스톤:</strong>
-                    <span th:text="${task.milestone != null ? task.milestone.getMilestoneName() : '없음'}">마일스톤 이름</span>
-                </div>
-                <div>
-                    <strong>태그:</strong>
-                    <div th:if="${task.tag != null}">
-                        <ul style="padding-left: 1rem; margin: 0;">
-                            <li th:each="tagItem : ${task.tag.tagList}" th:text="${tagItem.tagName}">태그 이름</li>
-                        </ul>
+            <div th:each="task : ${taskList}">
+                <a th:href="@{/project/{projectId}/task/{taskId}(projectId=${projectId}, taskId=${task.taskId})}" style="text-decoration: none; color: inherit;">
+                    <div class="task-card" style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+                        <h3 th:text="${task.taskTitle}">태스크 제목</h3>
+                        <p th:text="${task.taskDescription}">태스크 설명</p>
+                        <div>
+                            <strong>마일스톤:</strong>
+                            <span th:text="${task.milestone != null ? task.milestone.milestoneName : '없음'}">마일스톤 이름</span>
+                        </div>
+                        <div>
+                            <strong>태그:</strong>
+                            <div th:if="${task.tag != null}">
+                                <ul style="padding-left: 1rem; margin: 0;">
+                                    <li th:each="tagItem : ${task.tag.tagList}" th:text="${tagItem.tagName}">태그 이름</li>
+                                </ul>
+                            </div>
+                            <div th:if="${task.tag == null}">
+                                없음
+                            </div>
+                        </div>
                     </div>
-                    <div th:if="${task.tag == null}">
-                        없음
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

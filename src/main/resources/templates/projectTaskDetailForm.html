@@ -70,11 +70,11 @@
     <!-- ✅ Milestone, Tag 보여주기 -->
     <div style="margin-bottom: 2rem;">
         <!-- Milestone 표시 -->
-        <div th:if="${task.milestone != null}" style="font-size: 1rem; margin-bottom: 0.5rem;">
-            <strong>마일스톤:</strong> <span th:text="${task.milestone.milestoneName}">Milestone 이름</span>
+        <div th:if="${task.milestoneId != null}" style="font-size: 1rem; margin-bottom: 0.5rem;">
+            <strong>마일스톤:</strong> <span th:text="${task.milestoneId}">Milestone 이름</span>
         </div>
 
-        <!-- Tag 목록 표시 -->
+         Tag 목록 표시
         <div th:if="${tags != null}" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
             <span th:each="tag : ${tags}"
                   style="background-color: #e0f7fa; color: #00796b; padding: 0.3rem 0.6rem; border-radius: 12px; font-size: 0.9rem;"
@@ -102,7 +102,7 @@
 
     <hr style="margin-bottom: 2rem;">
 
-    <!-- ✅ 댓글 등록 폼 -->
+     ✅ 댓글 등록 폼
     <form th:action="@{/project/{projectId}/task/{taskId}/comment(projectId=${projectId}, taskId=${task.taskId})}" method="post" class="comment-section">
         <textarea name="commentContent" rows="3" placeholder="댓글을 입력하세요"></textarea>
         <button type="submit" class="edit-btn" style="margin-top: 0.5rem;">댓글 등록</button>
@@ -119,16 +119,16 @@
                 작성자: <span th:text="${comment.commentWriterId}">작성자</span>
             </div>
 
-            <!-- ✅ 자기 댓글이면 수정/삭제 버튼 노출 -->
-            <div class="comment-actions" th:if="${comment.commentWriterId == loginUserId}">
-                <form th:action="@{/task/{taskId}/comments/{commentId}/edit(taskId=${task.id}, commentId=${comment.id})}" method="get">
-                    <button type="submit" class="edit-btn" style="padding: 0.3rem 0.7rem;">댓글 수정</button>
-                </form>
-                <form th:action="@{/task/{taskId}/comments/{commentId}/delete(taskId=${task.id}, commentId=${comment.id})}" method="post" style="margin: 0;">
-                    <input type="hidden" name="_method" value="delete"/>
-                    <button type="submit" class="delete-btn" style="padding: 0.3rem 0.7rem;">댓글 삭제</button>
-                </form>
-            </div>
+<!--            &lt;!&ndash; ✅ 자기 댓글이면 수정/삭제 버튼 노출 &ndash;&gt;-->
+<!--            <div class="comment-actions" th:if="${comment.commentWriterId == loginUserId}">-->
+<!--                <form th:action="@{/task/{taskId}/comments/{commentId}/edit(taskId=${task.tasskId}, commentId=${comment.})}" method="get">-->
+<!--                    <button type="submit" class="edit-btn" style="padding: 0.3rem 0.7rem;">댓글 수정</button>-->
+<!--                </form>-->
+<!--                <form th:action="@{/task/{taskId}/comments/{commentId}/delete(taskId=${task.id}, commentId=${comment.id})}" method="post" style="margin: 0;">-->
+<!--                    <input type="hidden" name="_method" value="delete"/>-->
+<!--                    <button type="submit" class="delete-btn" style="padding: 0.3rem 0.7rem;">댓글 삭제</button>-->
+<!--                </form>-->
+<!--            </div>-->
         </div>
     </div>
 

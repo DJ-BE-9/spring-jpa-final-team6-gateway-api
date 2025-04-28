@@ -129,7 +129,15 @@ public class TaskService {
         }
     }
 
+    public ResponseTaskDto getTask(long projectId, long taskId) {
+        if(taskId < 0) {
+            throw new EmptyRequestException("task ID 값을 받지 못했습니다.");
+        }
 
+        ResponseTaskDto responseTaskDto = taskGetTaskDetailAdaptor.getTaskRequest(projectId, taskId);
+
+        return responseTaskDto;
+    }
 
 
 }

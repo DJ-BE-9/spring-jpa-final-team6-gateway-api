@@ -3,6 +3,7 @@ package com.nhnacademy.gateway.service;
 import com.nhnacademy.gateway.common.adaptor.comment.CommentGetCommentsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.comment.CommentPostAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
+import com.nhnacademy.gateway.model.dto.comment.ResponseCommentListDto;
 import com.nhnacademy.gateway.model.request.comment.CommentContentRequest;
 import com.nhnacademy.gateway.model.request.comment.RegisterCommentRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class CommentService {
     @Autowired
     private CommentPostAdaptor commentPostAdaptor;
 
-    public List<RegisterCommentRequest> getComments(long projectId, long taskId) {
+    public ResponseCommentListDto getComments(long projectId, long taskId) {
         if(taskId < 0) {
             throw new EmptyRequestException("task ID 값을 받지 못했습니다.");
         }

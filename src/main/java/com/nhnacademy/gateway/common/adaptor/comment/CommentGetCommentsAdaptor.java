@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Component
 public class CommentGetCommentsAdaptor {
-    private static final String COMMENT_GET_URL = "http:/localhost:7070/project/{projectId}/task/{taskId}/comment";
+    private static final String COMMENT_GET_URL = "http://localhost:7070/project/";
 
     private RestTemplate restTemplate;
 
@@ -21,17 +21,17 @@ public class CommentGetCommentsAdaptor {
         this.restTemplate = restTemplate;
     }
 
-    public List<RegisterCommentRequest> getComments(long projectId, long taskId) {
+    public ResponseCommentListDto getComments(long projectId, long taskId) {
 
         try {
             String url = COMMENT_GET_URL + String.valueOf(projectId) + "/task/" + String.valueOf(taskId) + "/comment";
             ResponseEntity<ResponseCommentListDto> response = restTemplate.getForEntity(url, ResponseCommentListDto.class);
 
-            if(Objects.isNull(response.getBody().getComments()) || !response.getStatusCode().is2xxSuccessful()) {
+            if(!response.getStatusCode().is2xxSuccessful()) {
                 throw new ResponseDtoException("Task ID 값에 대한 Comment들을 가져오지 못했습니다.");
             }
 
-            return response.getBody().getComments();
+            return response.getBody();
         }
         catch(Exception e) {
             throw new ResponseDtoException("Comments 값들을 가져오지 못했습니다.");

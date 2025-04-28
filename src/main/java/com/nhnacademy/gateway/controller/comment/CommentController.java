@@ -46,7 +46,7 @@ public class CommentController {
 
         commentService.postComment(commentContentRequest, projectId, taskId, memberId);
 
-        return "redirect:/localhost:8080/project/" + String.valueOf(projectId) + "/task/" + String.valueOf(taskId);
+        return "redirect:/project/" + String.valueOf(projectId) + "/task/" + String.valueOf(taskId);
 
     }
 
