@@ -2,7 +2,12 @@ package com.nhnacademy.gateway.controller.task;
 
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestonesDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagsDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
+import com.nhnacademy.gateway.model.dto.tag.TagRequest;
 import com.nhnacademy.gateway.service.MilestoneService;
+import com.nhnacademy.gateway.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +25,11 @@ public class TaskController {
 
 
     private MilestoneService milestoneService;
+    private TagService tagService;
 
-    public TaskController(MilestoneService milestoneService) {
+    public TaskController(MilestoneService milestoneService, TagService tagService) {
         this.milestoneService = milestoneService;
+        this.tagService = tagService;
     }
 
 
@@ -34,8 +41,9 @@ public class TaskController {
         model.addAttribute("projectId", projectId);
         model.addAttribute("milestones", milestoneList);
 
-        List tags = new ArrayList();
-        model.addAttribute("tags", tags); // TODO 해당 프로젝트에 등록된 태그 목록 가져오기
+        List<ResponseGetTagDto> tags = tagService.getTagsByProjectId(new TagRequest(projectId));
+        model.addAttribute("tags", tags);
+
         return "projectTaskRegisterForm";
     }
 
