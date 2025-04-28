@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.service;
 
+import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagGetByTaskIdAdapter;
 import com.nhnacademy.gateway.common.adaptor.tag.ProjectGetTagsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.tag.TagDeleteAdapter;
 import com.nhnacademy.gateway.common.adaptor.tag.TagRegisterAdapter;
@@ -27,6 +28,8 @@ public class TagService {
     private TagUpdateAdapter tagUpdateAdapter;
     @Autowired
     private TagDeleteAdapter tagDeleteAdapter;
+    @Autowired
+    private ProjectTagGetByTaskIdAdapter projectTagGetByTaskIdAdapter;
 
     public List<ResponseGetTagDto> getTagsByProjectId(TagRequest tagRequest) {
         if(Objects.isNull(tagRequest)){
@@ -57,8 +60,8 @@ public class TagService {
     }
 
     // TODO 태스크에 해당하는 태그 값들 가져오기
-    public ResponseGetTagsDto getTags(long projectId, long taskId) {
-        return null;
+    public ResponseTagListByTaskDto getTags(long projectId, long taskId) {
+        return projectTagGetByTaskIdAdapter.sendGetTagListByTaskId(projectId,taskId);
     }
 
 

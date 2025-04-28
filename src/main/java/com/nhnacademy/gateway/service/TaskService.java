@@ -7,10 +7,7 @@ import com.nhnacademy.gateway.common.adaptor.task.*;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
-import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagDto;
-import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagsDto;
-import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
-import com.nhnacademy.gateway.model.dto.tag.TagRequest;
+import com.nhnacademy.gateway.model.dto.tag.*;
 import com.nhnacademy.gateway.model.dto.task.ResponseTaskDetailDto;
 import com.nhnacademy.gateway.model.dto.task.ResponseTaskDto;
 import com.nhnacademy.gateway.model.request.projectTag.RegisterProjectTagRequest;
@@ -81,15 +78,13 @@ public class TaskService {
         for(ResponseTaskDto taskDto : taskDtoList ) {
             ResponseMilestoneDto milestone = milestoneService.getMilestone(projectId, taskDto.getMilestoneId());
             // TODO Task에 등록된 Tag 값들 가져오기
-
-
-
+            ResponseTagListByTaskDto tagListByTaskDto = tagService.getTags(projectId, taskDto.getTaskId());
             ResponseTaskDetailDto responseTaskDetailDto = new ResponseTaskDetailDto(
                     taskDto.getTaskId(),
                     taskDto.getTaskTitle(),
                     taskDto.getTaskDescription(),
                     milestone,
-                    new ResponseTagDto("태그명")
+                    tagListByTaskDto
             );
             taskDetailDtoList.add(responseTaskDetailDto);
         }
