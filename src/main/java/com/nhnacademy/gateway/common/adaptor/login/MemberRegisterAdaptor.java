@@ -25,6 +25,8 @@ public class MemberRegisterAdaptor {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        log.info("password:{}", registerRequest.getPassword());
+
         HttpEntity<MemberRegisterRequest> requestHttpEntity = new HttpEntity<>(registerRequest, headers);
 
         try {

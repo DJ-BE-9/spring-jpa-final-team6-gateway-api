@@ -6,8 +6,11 @@ import com.nhnacademy.gateway.exception.MemberRegisterProcessException;
 import com.nhnacademy.gateway.exception.NotFoundMemberException;
 import com.nhnacademy.gateway.model.domain.Project;
 import com.nhnacademy.gateway.model.dto.ResponseProjectDto;
+import com.nhnacademy.gateway.model.dto.ResponseProjectMembersDto;
 import com.nhnacademy.gateway.model.dto.ResponseProjectsDto;
 import com.nhnacademy.gateway.model.request.member.MemberIdRequest;
+import com.nhnacademy.gateway.model.request.project.ProjectIdRequest;
+import com.nhnacademy.gateway.model.request.project.ProjectMember;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectMemberRequest;
 import com.nhnacademy.gateway.model.request.project.RegisterProjectRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,10 @@ public class ProjectService {
     private ProjectRegisterMemberAdaptor projectRegisterMemberAdaptor;
     @Autowired
     private ProjectFindMemberAdaptor projectFindMemberAdaptor;
+    @Autowired
+    private ProjectGetProjectMembersAdaptor projectGetProjectMembersAdaptor;
+    @Autowired
+    private ProjectPostProjectMemberDeleteAdaptor projectPostProjectMemberDeleteAdaptor;
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
         if(Objects.isNull(memberIdRequest) || Objects.isNull(memberIdRequest.getMemberId()) || memberIdRequest.getMemberId().isEmpty()) {
@@ -52,8 +59,7 @@ public class ProjectService {
         }
 
         long projectId = projectPostProjectAdaptor.sendRegisterRequest(projectRequest, memberId);
-        log.info("ProjectService ProjectId:{}", projectId);
-        log.info("ProjectService memberId:{}", memberId);
+
         if(!projectPostMemberRegisterAdaptor.sendRegisterProjectMember(projectId, new RegisterProjectMemberRequest(memberId, true))) {
             throw new MemberRegisterProcessException("Project Member 등록하지 못했습니다.");
         }
@@ -82,6 +88,27 @@ public class ProjectService {
         }
 
         projectRegisterMemberAdaptor.sendRegisterMember(new RegisterProjectMemberRequest(memberId, false), projectId);
+
+    }
+
+    public List<ProjectMember> getProjectMembers(ProjectIdRequest projectIdRequest, long projectId) {
+        if(Objects.isNull(projectIdRequest) || projectId < 0) {
+            throw new EmptyRequestException("project 값들을 받지 못했습니다.");
+        }
+
+        ResponseProjectMembersDto responseProjectMembersDto = projectGetProjectMembersAdaptor.sendAndGetProjectMembers(projectIdRequest, projectId);
+
+        return responseProjectMembersDto.getMembers();
+    }
+
+    public void deleteProjectMember(long projectId, String memberId) {
+        if(projectId < 0 || Objects.isNull(memberId) || memberId.isEmpty()) {
+            throw new EmptyRequestException("project ID 값 또는 member ID 값을 제대로 받지 못했습니다.");
+        }
+
+        if(!projectPostProjectMemberDeleteAdaptor.deleteProjectMember(projectId, memberId)) {
+            throw new RuntimeException("해당 member를 삭제하지 못했습니다.");
+        }
 
     }
 

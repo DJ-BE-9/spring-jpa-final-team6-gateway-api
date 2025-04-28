@@ -33,7 +33,7 @@ public class ProjectFindMemberAdaptor {
             String url = PROJECT_FIND_MEMBER_URL + String.valueOf(projectId) + "/members";
             ResponseEntity<ResponseIsTrueDto> response = restTemplate.postForEntity(url, requestHttpEntity, ResponseIsTrueDto.class);
 
-            if(Objects.isNull(response.getBody())) {
+            if(Objects.isNull(response.getBody()) || !response.getBody().isExistsMember()) {
                 throw new ResponseDtoException("ID 값에 해당하는 Member를 찾지 못했습니다.");
             }
 

@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
@@ -36,6 +37,13 @@ public class MemberLoginAdaptor {
             }
 
             return response.getBody();
+        }
+        catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString(); // 서버가 준 메시지
+            if (responseBody.contains("탈퇴한 회원입니다")) {
+                throw new LoginProcessException("탈퇴한 회원입니다.");
+            }
+            throw new LoginProcessException("로그인 실패");
         }
         catch(Exception e) {
             throw new LoginProcessException("로그인 실패");

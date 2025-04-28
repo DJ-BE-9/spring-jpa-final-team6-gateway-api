@@ -31,9 +31,6 @@ public class LoginMemberDetailsService implements UserDetailsService {
             throw new LoginProcessException("로그인 실패");
         }
 
-        log.info("id:{}", loginResponseDto.getMemberId());
-        log.info("password:{}", loginResponseDto.getPassword());
-
         return new LoginProcessMember(loginResponseDto.getMemberId(), loginResponseDto.getPassword());
     }
 
