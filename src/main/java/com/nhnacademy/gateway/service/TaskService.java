@@ -3,11 +3,7 @@ package com.nhnacademy.gateway.service;
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagPostRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.tag.ProjectGetTagsAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskGetTaskDetailAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskDeleteAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskGetTasksAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskPostRegisterAdaptor;
-import com.nhnacademy.gateway.common.adaptor.task.TaskPutUpdateAdaptor;
+import com.nhnacademy.gateway.common.adaptor.task.*;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
@@ -20,7 +16,6 @@ import com.nhnacademy.gateway.model.dto.task.ResponseTaskDto;
 import com.nhnacademy.gateway.model.request.projectTag.RegisterProjectTagRequest;
 import com.nhnacademy.gateway.model.request.task.RegisterTaskRequest;
 import com.nhnacademy.gateway.model.request.task.RegisterTaskTagRequest;
-import com.nhnacademy.gateway.model.request.task.TaskDetailRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +56,10 @@ public class TaskService {
     private MilestoneService milestoneService;
 
     @Autowired
+    private TagService tagService;
+
+
+    @Autowired
     private ProjectGetTagsAdaptor projectGetTagsAdaptor;
 
     public void registerTask(long projectId, RegisterTaskTagRequest request) {
@@ -80,7 +79,11 @@ public class TaskService {
 
         List<ResponseTaskDto> taskDtoList = taskGetTasksAdaptor.sendGetTaskListRequest(projectId).getTasks();
         for(ResponseTaskDto taskDto : taskDtoList ) {
-            ResponseMilestoneDto milestone = milestoneService.getMilestone(taskDto.getMilestoneId());
+            ResponseMilestoneDto milestone = milestoneService.getMilestone(projectId, taskDto.getMilestoneId());
+            // TODO Task에 등록된 Tag 값들 가져오기
+
+
+
             ResponseTaskDetailDto responseTaskDetailDto = new ResponseTaskDetailDto(
                     taskDto.getTaskId(),
                     taskDto.getTaskTitle(),
@@ -116,5 +119,22 @@ public class TaskService {
 
         return responseGetTagsDto.getTagList();
     }
+
+    public void updateTask(long projectId, long taskId,RegisterTaskTagRequest request) {
+        if(Objects.isNull(request)) {
+            throw new EmptyRequestException("UpdateTaskRequest 값을 받지 못했습니다");
+        }
+        RegisterTaskRequest registerTaskRequest = new RegisterTaskRequest(request.getTaskTitle(), request.getTaskDescription(), request.getMilestoneId());
+        taskPutUpdateAdaptor.sendUpdateRequest(projectId, taskId,registerTaskRequest);
+        // 기존 Task에 등록된 Tag 삭제
+        projectTagDeleteAdaptor.sendDeleteProjectTag(projectId, taskId);
+        RegisterProjectTagRequest registerProjectTagRequest = new RegisterProjectTagRequest(request.getTagIds());
+        if(!projectTagPostRegisterAdaptor.sendRegisterRequest(projectId, taskId, registerProjectTagRequest)) {
+            throw new RegisterProcessException("해당 Task에 Tag를 수정하지 못했습니다.");
+        }
+    }
+
+
+
 
 }

@@ -56,5 +56,10 @@ public class TagService {
         tagDeleteAdapter.sendDeleteRequest(tagId,projectId);
     }
 
+    // TODO 태스크에 해당하는 태그 값들 가져오기
+    public ResponseGetTagsDto getTags(long projectId, long taskId) {
+        return null;
+    }
+
 
 }

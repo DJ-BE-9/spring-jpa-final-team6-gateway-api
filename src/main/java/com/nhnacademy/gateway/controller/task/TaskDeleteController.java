@@ -1,12 +1,12 @@
 package com.nhnacademy.gateway.controller.task;
 
 import com.nhnacademy.gateway.service.TaskService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("/project/{projectId}/task/{taskId}")
 public class TaskDeleteController {
 
