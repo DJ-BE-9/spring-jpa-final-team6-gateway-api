@@ -1,8 +1,7 @@
 package com.nhnacademy.gateway.common.adaptor.comment;
 
 import com.nhnacademy.gateway.exception.ResponseDtoException;
-import com.nhnacademy.gateway.model.dto.ResponseDto;
-import com.nhnacademy.gateway.model.dto.comment.ResponseCommentDto;
+import com.nhnacademy.gateway.model.dto.comment.ResponseCommentContentDto;
 import com.nhnacademy.gateway.model.request.comment.RegisterCommentRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,7 +30,7 @@ public class CommentPostAdaptor {
 
         try {
             String url = COMMENT_POST_URL + String.valueOf(projectId) + "/task/" + String.valueOf(registerCommentRequest.getTaskId()) + "/comment";
-            ResponseEntity<ResponseCommentDto> response = restTemplate.postForEntity(url, requestHttpEntity, ResponseCommentDto.class);
+            ResponseEntity<ResponseCommentContentDto> response = restTemplate.postForEntity(url, requestHttpEntity, ResponseCommentContentDto.class);
 
             if(Objects.isNull(response)) {
                 throw new ResponseDtoException("Comment를 입력하지 못했습니다.");

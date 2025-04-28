@@ -9,6 +9,8 @@ import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagsDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
 import com.nhnacademy.gateway.model.dto.tag.TagRequest;
+import com.nhnacademy.gateway.model.request.comment.RegisterCommentRequest;
+import com.nhnacademy.gateway.service.CommentService;
 import com.nhnacademy.gateway.service.MilestoneService;
 import com.nhnacademy.gateway.service.TaskService;
 import com.nhnacademy.gateway.service.TagService;
@@ -28,6 +30,8 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private CommentService commentService;
 
     private MilestoneService milestoneService;
     private TagService tagService;
@@ -64,6 +68,8 @@ public class TaskController {
         model.addAttribute("tags", tags);
 
         //TODO# comments addAttribute
+        List<RegisterCommentRequest> comments = commentService.getComments(projectId, taskId);
+        model.addAttribute("comments", comments);
 
         return "projectTaskDetailForm";
     }

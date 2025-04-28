@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.service;
 
+import com.nhnacademy.gateway.common.adaptor.comment.CommentGetCommentsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.comment.CommentPostAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.model.request.comment.CommentContentRequest;
@@ -18,15 +19,16 @@ import java.util.Objects;
 public class CommentService {
 
     @Autowired
+    private CommentGetCommentsAdaptor commentGetCommentsAdaptor;
+    @Autowired
     private CommentPostAdaptor commentPostAdaptor;
 
-    public List<RegisterCommentRequest> getComments(long taskId) {
+    public List<RegisterCommentRequest> getComments(long projectId, long taskId) {
         if(taskId < 0) {
             throw new EmptyRequestException("task ID 값을 받지 못했습니다.");
         }
 
-
-
+        return commentGetCommentsAdaptor.getComments(projectId, taskId);
     }
 
     public void postComment(CommentContentRequest commentContentRequest, long projectId, long taskId, String memberId) {
