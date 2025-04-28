@@ -18,6 +18,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,8 @@ public class ProjectDetailController {
     // TODO Task 목록 보여주기
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private StringRedisTemplate stringStringRedisTemplate;
 
     @GetMapping
     public String getProjectDetail(@PathVariable("projectId") long projectId, Model model,
@@ -52,9 +55,8 @@ public class ProjectDetailController {
 
         String sessionId = getSessionIdFromCookie(request);
 
-        Object value = redisTemplate.opsForValue().get(sessionId);
-        if (value != null) {
-            String memberId = value.toString();
+        String memberId = stringStringRedisTemplate.opsForValue().get(sessionId);
+        if (memberId != null) {
             model.addAttribute("memberId", memberId);
         }
 
