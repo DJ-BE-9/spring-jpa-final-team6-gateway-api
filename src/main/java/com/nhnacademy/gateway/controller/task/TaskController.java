@@ -17,6 +17,8 @@ import java.util.List;
 @RequestMapping("/project/{projectId}")
 @Slf4j
 public class TaskController {
+
+
     private MilestoneService milestoneService;
 
     public TaskController(MilestoneService milestoneService) {
@@ -37,7 +39,16 @@ public class TaskController {
         return "projectTaskRegisterForm";
     }
 
+    @GetMapping("/task/{taskId}")
+    public String getTask(Model model,
+                          @PathVariable("projectId") long projectId,
+                          @PathVariable("taskId") long taskId) {
 
+
+
+        return "projectTaskDetailForm";
+
+    }
 
 
 }
