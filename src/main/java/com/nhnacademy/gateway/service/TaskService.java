@@ -2,6 +2,7 @@ package com.nhnacademy.gateway.service;
 
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagPostRegisterAdaptor;
+import com.nhnacademy.gateway.common.adaptor.tag.ProjectGetTagsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskGetTaskDetailAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskGetTasksAdaptor;
@@ -10,7 +11,10 @@ import com.nhnacademy.gateway.common.adaptor.task.TaskPutUpdateAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagDto;
+import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagsDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
+import com.nhnacademy.gateway.model.dto.tag.TagRequest;
 import com.nhnacademy.gateway.model.dto.task.ResponseTaskDetailDto;
 import com.nhnacademy.gateway.model.dto.task.ResponseTaskDto;
 import com.nhnacademy.gateway.model.request.projectTag.RegisterProjectTagRequest;
@@ -58,6 +62,9 @@ public class TaskService {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private ProjectGetTagsAdaptor projectGetTagsAdaptor;
 
     public void registerTask(long projectId, RegisterTaskTagRequest request) {
         if(Objects.isNull(request)) {
@@ -119,7 +126,14 @@ public class TaskService {
         }
     }
 
+    public List<ResponseGetTagDto> getTagIds(TagRequest tagRequest) {
+        if(Objects.isNull(tagRequest)) {
+            throw new EmptyRequestException("project ID 값을 받지 못했습니다.");
+        }
 
+        ResponseGetTagsDto responseGetTagsDto =  projectGetTagsAdaptor.sendAndGetProjectTags(tagRequest);
 
+        return responseGetTagsDto.getTagList();
+    }
 
 }

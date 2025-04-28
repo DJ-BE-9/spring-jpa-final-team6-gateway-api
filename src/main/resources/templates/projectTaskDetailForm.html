@@ -65,20 +65,20 @@
 <div class="container">
 
     <!-- ✅ Task 제목 -->
-    <h1 th:text="${task.title}" style="margin-bottom: 1rem;">Task 제목</h1>
+    <h1 th:text="${task.taskTitle}" style="margin-bottom: 1rem;">Task 제목</h1>
 
     <!-- ✅ Milestone, Tag 보여주기 -->
     <div style="margin-bottom: 2rem;">
         <!-- Milestone 표시 -->
         <div th:if="${task.milestone != null}" style="font-size: 1rem; margin-bottom: 0.5rem;">
-            <strong>마일스톤:</strong> <span th:text="${task.milestone.name}">Milestone 이름</span>
+            <strong>마일스톤:</strong> <span th:text="${task.milestone.milestoneName}">Milestone 이름</span>
         </div>
 
         <!-- Tag 목록 표시 -->
-        <div th:if="${task.tags != null}" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-            <span th:each="tag : ${task.tags}"
+        <div th:if="${tags != null}" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            <span th:each="tag : ${tags}"
                   style="background-color: #e0f7fa; color: #00796b; padding: 0.3rem 0.6rem; border-radius: 12px; font-size: 0.9rem;"
-                  th:text="${tag.name}">
+                  th:text="${tag.tagName}">
                 태그 이름
             </span>
         </div>
@@ -86,7 +86,7 @@
 
     <!-- ✅ Task 본문 내용 -->
     <div style="margin-bottom: 2rem; white-space: pre-wrap;">
-        <p th:text="${task.content}">Task 내용</p>
+        <p th:text="${task.taskDescription}">Task 내용</p>
     </div>
 
     <!-- ✅ 수정/삭제 버튼 -->
@@ -103,8 +103,8 @@
     <hr style="margin-bottom: 2rem;">
 
     <!-- ✅ 댓글 등록 폼 -->
-    <form th:action="@{/task/{taskId}/comments(taskId=${task.id})}" method="post" class="comment-section">
-        <textarea name="content" rows="3" placeholder="댓글을 입력하세요"></textarea>
+    <form th:action="@{/project/{projectId}/task/{taskId}/comment(projectId=${projectId}, taskId=${task.taskId})}" method="post" class="comment-section">
+        <textarea name="commentContent" rows="3" placeholder="댓글을 입력하세요"></textarea>
         <button type="submit" class="edit-btn" style="margin-top: 0.5rem;">댓글 등록</button>
     </form>
 
@@ -112,15 +112,15 @@
     <div class="comment-section">
         <h3>댓글</h3>
         <div th:each="comment : ${comments}" class="comment">
-            <p th:text="${comment.content}">댓글 내용</p>
+            <p th:text="${comment.commentContent}">댓글 내용</p>
 
             <!-- ✅ 댓글 작성자 표시 -->
             <div class="comment-meta">
-                작성자: <span th:text="${comment.writer}">작성자</span>
+                작성자: <span th:text="${comment.commentWriterId}">작성자</span>
             </div>
 
             <!-- ✅ 자기 댓글이면 수정/삭제 버튼 노출 -->
-            <div class="comment-actions" th:if="${comment.writer == loginUserId}">
+            <div class="comment-actions" th:if="${comment.commentWriterId == loginUserId}">
                 <form th:action="@{/task/{taskId}/comments/{commentId}/edit(taskId=${task.id}, commentId=${comment.id})}" method="get">
                     <button type="submit" class="edit-btn" style="padding: 0.3rem 0.7rem;">댓글 수정</button>
                 </form>
