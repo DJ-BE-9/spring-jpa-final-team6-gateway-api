@@ -25,7 +25,7 @@ public class MemberCudController {
             return "redirect:/";
         }
 
-        return "redirect:/project/" + memberId;
+        return "redirect:/member/" + memberId;
     }
 
 }

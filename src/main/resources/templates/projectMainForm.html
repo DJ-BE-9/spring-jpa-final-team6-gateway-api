@@ -75,7 +75,8 @@
       </select>
     </form>
 
-    <form th:action="@{/project/{memberId}/register(memberId=${memberId})}" method="get">
+    <form th:action="@{/project/register}" method="get">
+      <input type="hidden" name="memberId" th:value="${memberId}" />
       <button type="submit">프로젝트 생성</button>
     </form>
 
@@ -87,8 +88,10 @@
 
 <div class="container">
   <div th:each="project : ${projects}" class="project-card">
-    <h3 th:text="${project.projectName}">프로젝트 이름</h3>
-    <p th:text="${project.projectState}">상태</p>
+    <a th:href="@{/project/{projectId}(projectId=${project.projectId})}" style="text-decoration: none; color: inherit;">
+      <h3 th:text="${project.projectName}">프로젝트 이름</h3>
+      <p th:text="${project.projectState}">상태</p>
+    </a>
   </div>
 </div>
 

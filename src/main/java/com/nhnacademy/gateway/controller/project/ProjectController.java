@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/project/{memberId}")
+@RequestMapping("/member")
 @Slf4j
 public class ProjectController {
 
@@ -23,17 +23,14 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping
+    @GetMapping(params = "memberId")
     public String getProjects(Model model,
-                              @PathVariable("memberId") String memberId) {
+                              @RequestParam("memberId") String memberId) {
         ResponseUserNameDto response = userNameAdaptor.sendResponseUserNameDto(new MemberIdRequest(memberId));
         model.addAttribute("memberName", response.getUserName());
         model.addAttribute("memberId", memberId);
 
         List<Project> projects = projectService.getProjectsByMemberId(new MemberIdRequest(memberId));
-        for(Project project : projects) {
-            log.error("{}", project.getProjectName());
-        }
         model.addAttribute("projects", projects);
 
         return "projectMainForm";

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>태그 등록</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
+        .container { padding: 2rem; }
+        .tag-list { background: white; padding: 2rem; border: 2px solid #0d2b45; min-height: 400px; }
+        .form-section { margin-top: 1rem; display: flex; align-items: center; gap: 1rem; }
+        input[type="text"] { padding: 0.5rem; width: 70%; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 0.5rem 1rem; border: none; border-radius: 4px; background-color: #4a90e2; color: white; cursor: pointer; }
+        .link { margin-top: 1rem; }
+        .link a { color: #4a90e2; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>태그 등록</h2>
+
+    <!-- 등록 input + 버튼 -->
+    <div class="form-section">
+        <input type="text" id="tagNameInput" placeholder="태그 이름 입력">
+        <button onclick="addTag()">등록</button>
+    </div>
+
+    <!-- 태그 리스트 영역 -->
+    <div id="tagList" class="tag-list">
+        <!-- 등록된 태그 리스트가 나올 부분 -->
+        태그 리스트 나열 될 부분
+    </div>
+
+    <!-- 초기화/설정 링크 -->
+    <div class="link">
+        <a href="#" onclick="resetTags()">초기화</a> |
+        <a href="#">태그 설정 페이지 이동</a>
+    </div>
+</div>
+
+<script>
+    function addTag() {
+        const input = document.getElementById('tagNameInput');
+        const tagName = input.value.trim();
+        if (!tagName) {
+            alert('태그 이름을 입력하세요.');
+            return;
+        }
+
+        const tagList = document.getElementById('tagList');
+        const newTag = document.createElement('div');
+        newTag.textContent = tagName;
+        tagList.appendChild(newTag);
+
+        input.value = '';
+    }
+
+    function resetTags() {
+        const tagList = document.getElementById('tagList');
+        tagList.innerHTML = '';
+    }
+</script>
+
+</body>
+</html>
