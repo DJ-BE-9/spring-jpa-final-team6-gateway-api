@@ -9,10 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseCommentDto {
+public class ResponseCommentContentDto {
 
     private String commentContent;
-    private long taskId;
-    private String commentWriterId;
 
 }
