@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Register</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4a90e2;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        select, button {
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button {
+            background-color: white;
+            color: #4a90e2;
+        }
+        .container {
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .options {
+            margin-top: 0.5rem;
+        }
+        .option-item {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">내 프로젝트</div>
+    <div class="header-right">
+        <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님 </span>
+        <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
+            <select name="cud" onchange="this.form.submit()">
+                <option value="JOIN">가입</option>
+                <option value="DORMANT">휴면</option>
+                <option value="WITHDRAWAL">탈퇴</option>
+            </select>
+        </form>
+
+        <form th:action="@{/project/register}" method="get">
+            <input type="hidden" name="memberId" th:value="${memberId}" />
+            <button type="submit">프로젝트 생성</button>
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
+</header>
+
+<div class="container">
+    <form th:action="@{/project/{projectId}/task/register(projectId=${projectId})}" method="post">
+        <input type="hidden" name="projectId" th:value="${projectId}" />
+
+        <div class="form-group">
+            <label for="taskTitle">태스크 제목</label>
+            <input type="text" id="taskTitle" name="taskTitle" required>
+        </div>
+
+        <div class="form-group">
+            <label for="taskContent">태스크 내용</label>
+            <textarea id="taskContent" name="taskDescription" rows="5" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>마일스톤 선택 (1개)</label>
+            <div class="options">
+                <div th:if="${#lists.isEmpty(milestones)}">
+                    <span style="color: red;">마일스톤을 등록해주세요</span>
+                </div>
+                <div th:if="${!#lists.isEmpty(milestones)}">
+                    <div class="option-item" th:each="milestone : ${milestones}">
+                        <label>
+                            <input type="radio" name="milestoneId" th:value="${milestone.milestoneId}" required>
+                            <span th:text="${milestone.milestoneName}">마일스톤 이름</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>태그 선택 (여러 개)</label>
+            <div class="options">
+                <div th:if="${#lists.isEmpty(tags)}">
+                    <span style="color: red;">태그를 등록해주세요</span>
+                </div>
+                <div th:if="${!#lists.isEmpty(tags)}">
+                    <div class="option-item" th:each="tag : ${tags}">
+                        <label>
+                            <input type="checkbox" name="tagIds" th:value="${tag.tagId}">
+                            <span th:text="${tag.tagName}">태그 이름</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">태스크 등록</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

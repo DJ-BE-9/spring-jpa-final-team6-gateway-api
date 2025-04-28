@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 public class ProjectPostMemberRegisterAdaptor {
     private static final String REGISTER_MEMBER_API_URL = "http://localhost:7070/project/";
 
-    private final RestTemplate restTemplate; //.
+    private final RestTemplate restTemplate;
 
     public boolean sendRegisterProjectMember(long projectId, RegisterProjectMemberRequest registerProjectMemberRequest) {
         HttpHeaders headers = new HttpHeaders();
