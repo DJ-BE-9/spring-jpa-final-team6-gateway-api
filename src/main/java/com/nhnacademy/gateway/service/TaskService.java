@@ -2,6 +2,7 @@ package com.nhnacademy.gateway.service;
 
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagPostRegisterAdaptor;
+import com.nhnacademy.gateway.common.adaptor.task.TaskGetTaskDetailAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskGetTasksAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskPostRegisterAdaptor;
@@ -15,6 +16,7 @@ import com.nhnacademy.gateway.model.dto.task.ResponseTaskDto;
 import com.nhnacademy.gateway.model.request.projectTag.RegisterProjectTagRequest;
 import com.nhnacademy.gateway.model.request.task.RegisterTaskRequest;
 import com.nhnacademy.gateway.model.request.task.RegisterTaskTagRequest;
+import com.nhnacademy.gateway.model.request.task.TaskDetailRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,9 @@ public class TaskService {
     // 태스크 수정 요청 어댑터
     @Autowired
     private TaskPutUpdateAdaptor taskPutUpdateAdaptor;
+
+    @Autowired
+    private TaskGetTaskDetailAdaptor taskGetTaskDetailAdaptor;
 
     // 태스크 삭제 요청 어댑터
     @Autowired
@@ -82,6 +87,15 @@ public class TaskService {
         return taskDetailDtoList;
     }
 
+    public TaskDetailRequest getTaskDetail(long projectId, long taskId) {
+        if(taskId < 0) {
+            throw new EmptyRequestException("task ID 값을 받지 못했습니다.");
+        }
+
+        taskGetTaskDetailAdaptor.getTaskRequest(projectId, taskId);
+
+        return null;
+    }
 
     public void deleteTask(long projectId, long taskId) {
         projectTagDeleteAdaptor.sendDeleteProjectTag(projectId, taskId);
