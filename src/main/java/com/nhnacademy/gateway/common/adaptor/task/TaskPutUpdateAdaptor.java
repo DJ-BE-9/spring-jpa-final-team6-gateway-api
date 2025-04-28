@@ -31,7 +31,6 @@ public class TaskPutUpdateAdaptor {
         HttpEntity<RegisterTaskRequest> requestHttpEntity = new HttpEntity<>(registerTaskRequest, headers);
 
         try {
-
             ResponseEntity<Void> response = restTemplate.exchange(
                     api,
                     HttpMethod.PUT,
