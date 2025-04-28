@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.service;
 
-import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectDetailAdapter;
+import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectDetailAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectGetProjectsAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectPostMemberRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.project.ProjectPostRegisterAdaptor;
@@ -32,7 +32,7 @@ public class ProjectService {
     @Autowired
     private ProjectPostMemberRegisterAdaptor projectPostMemberRegisterAdaptor;
     @Autowired
-    private ProjectGetProjectDetailAdapter projectGetProjectDetailAdapter;
+    private ProjectGetProjectDetailAdaptor projectGetProjectDetailAdaptor;
 
 
     public List<Project> getProjectsByMemberId(MemberIdRequest memberIdRequest) {
@@ -62,7 +62,7 @@ public class ProjectService {
         if(Objects.isNull(projectId)) {
             throw new EmptyRequestException("ProjectId 값을 받지 못했습니다.");
         }
-        ResponseProjectDto responseProjectDto = projectGetProjectDetailAdapter.sendAndGetProject(projectId);
+        ResponseProjectDto responseProjectDto = projectGetProjectDetailAdaptor.sendAndGetProject(projectId);
         return new Project(
                 responseProjectDto.getProjectId(),
                 responseProjectDto.getProjectName(),

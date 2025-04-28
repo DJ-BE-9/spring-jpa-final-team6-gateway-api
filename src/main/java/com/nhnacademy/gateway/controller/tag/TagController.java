@@ -28,8 +28,8 @@ public class TagController {
     @PostMapping
     public ResponseEntity<ResponsePostTagDto> createTag(@RequestBody TagRegisterToProjectRequest tagRegisterToProjectRequest,
                                                        @PathVariable("projectId") long projectId) {
-        ResponsePostTagDto responsePostTagDto = tagService.registerTag()
+        ResponsePostTagDto responsePostTagDto = tagService.registerTag(tagRegisterToProjectRequest);
+        return ResponseEntity.ok(responsePostTagDto);
     }
 
- //TODO 태그 등록 하기
 }
