@@ -95,6 +95,22 @@
         .modal { display: none; position: fixed; z-index: 2; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
         .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
         .item { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+
+        /* 태스크 생성 버튼 */
+        .task-button {
+            padding: 0.5rem 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-button:hover {
+            background-color: #357ABD;
+        }
     </style>
 </head>
 <body>
@@ -131,11 +147,16 @@
                 <label>태그: <select onclick="openModal('tagModal')"><option>전체</option></select></label>
                 <label>마일스톤: <select onclick="openModal('milestoneModal')"><option>전체</option></select></label>
             </div>
+            <div class="filter-right" style="margin: 0 1rem">
+                <form th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
+                    <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
+                    <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
+                </form>
+                <form th:action="@{/project/{projectId}/task(projectId=${projectId})}" method="get">
+                    <button type="submit" class="task-button" style="padding: 0.5rem;">태스크 생성</button>
+                </form>
+            </div>
 
-            <form class="filter-right" th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
-                <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
-                <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
-            </form>
         </div>
         <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
     </div>
@@ -155,7 +176,19 @@
 <!-- 마일스톤 모달 (기존 코드 유지) -->
 <div id="milestoneModal" class="modal">
     <div class="modal-content">
-        <!-- 마일스톤 모달 내용 (생략) -->
+        <h2 id="milestoneModalTitle">마일스톤 추가</h2>
+        <input type="text" id="milestoneName" placeholder="마일스톤 이름 입력" required>
+        <div style="margin-top: 0.5rem;">
+            기간
+            <label><input type="radio" name="milestonePeriod" value="none" checked onchange="togglePeriodInput()"> 없음</label>
+            <label><input type="radio" name="milestonePeriod" value="set" onchange="togglePeriodInput()"> 있음</label>
+        </div>
+        <div id="periodInputs" style="display: none; margin-top: 0.5rem;">
+            <input type="date" id="startDate"> ~ <input type="date" id="endDate">
+        </div>
+        <button id="saveMilestoneButton" onclick="saveMilestone()">저장</button>
+        <div id="milestoneList"></div>
+        <button onclick="closeModal('milestoneModal')">닫기</button>
     </div>
 </div>
 
