@@ -1,7 +1,6 @@
 package com.nhnacademy.gateway.model.dto.task;
 
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
-import com.nhnacademy.gateway.model.dto.tag.ResponseGetTagsDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
