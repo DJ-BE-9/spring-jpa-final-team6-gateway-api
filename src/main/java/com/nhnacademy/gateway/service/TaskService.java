@@ -73,7 +73,7 @@ public class TaskService {
 
         List<ResponseTaskDto> taskDtoList = taskGetTasksAdaptor.sendGetTaskListRequest(projectId).getTasks();
         for(ResponseTaskDto taskDto : taskDtoList ) {
-            ResponseMilestoneDto milestone = milestoneService.getMilestone(taskDto.getMilestoneId());
+            ResponseMilestoneDto milestone = milestoneService.getMilestone(projectId, taskDto.getMilestoneId());
             ResponseTaskDetailDto responseTaskDetailDto = new ResponseTaskDetailDto(
                     taskDto.getTaskId(),
                     taskDto.getTaskTitle(),
@@ -100,6 +100,20 @@ public class TaskService {
     public void deleteTask(long projectId, long taskId) {
         projectTagDeleteAdaptor.sendDeleteProjectTag(projectId, taskId);
         taskDeleteAdaptor.sendDeleteRequest(projectId, taskId);
+    }
+
+    public void updateTask(long projectId, long taskId,RegisterTaskTagRequest request) {
+        if(Objects.isNull(request)) {
+            throw new EmptyRequestException("UpdateTaskRequest 값을 받지 못했습니다");
+        }
+        RegisterTaskRequest registerTaskRequest = new RegisterTaskRequest(request.getTaskTitle(), request.getTaskDescription(), request.getMilestoneId());
+        taskPutUpdateAdaptor.sendUpdateRequest(projectId, taskId,registerTaskRequest);
+        // 기존 Task에 등록된 Tag 삭제
+        projectTagDeleteAdaptor.sendDeleteProjectTag(projectId, taskId);
+        RegisterProjectTagRequest registerProjectTagRequest = new RegisterProjectTagRequest(request.getTagIds());
+        if(!projectTagPostRegisterAdaptor.sendRegisterRequest(projectId, taskId, registerProjectTagRequest)) {
+            throw new RegisterProcessException("해당 Task에 Tag를 수정하지 못했습니다.");
+        }
     }
 
 

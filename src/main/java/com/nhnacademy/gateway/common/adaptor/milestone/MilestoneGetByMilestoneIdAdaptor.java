@@ -20,19 +20,19 @@ public class MilestoneGetByMilestoneIdAdaptor {
 
     private final RestTemplate restTemplate;
 
-    public ResponseMilestoneDto sendGetMilestonesRequest(long projectId) {
-        String api = PROJECT_API + projectId + "/milestone";
+    public ResponseMilestoneDto sendGetMilestoneByMilestoneIdRequest(long projectId ,long milestoneId) {
+        String api = PROJECT_API + projectId + "/milestone/" + milestoneId;
 
         try {
             ResponseEntity<ResponseMilestoneDto> response = restTemplate.getForEntity(api, ResponseMilestoneDto.class);
 
             if (!response.getStatusCode().is2xxSuccessful() || Objects.isNull(response.getBody())) {
-                throw new ResponseDtoException("해당 프로젝트의 마일스톤 목록을 반환하지 못했습니다.");
+                throw new ResponseDtoException("해당 태스크의 마일스톤을 반환하지 못했습니다.");
             }
 
             return response.getBody();
         } catch (Exception e) {
-            throw new ResponseDtoException("서버에서 해당 프로젝트의 마일스톤 목록 요청의 응답을 받지 못했습니다");
+            throw new ResponseDtoException("서버에서 해당 태스크의 마일스톤 요청의 응답을 받지 못했습니다");
         }
 
 

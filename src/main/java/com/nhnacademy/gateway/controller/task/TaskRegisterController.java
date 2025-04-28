@@ -6,10 +6,12 @@ import com.nhnacademy.gateway.model.request.task.RegisterTaskTagRequest;
 import com.nhnacademy.gateway.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.data.redis.stream.Task;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/project/{projectId}/task/register")
 public class TaskRegisterController {
 

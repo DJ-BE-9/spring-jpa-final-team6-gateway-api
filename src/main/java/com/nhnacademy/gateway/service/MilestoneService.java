@@ -64,8 +64,8 @@ public class MilestoneService {
         milestoneDeleteAdaptor.sendDeleteRequest(projectId, milestoneId);
     }
 
-    public ResponseMilestoneDto getMilestone(long milestoneId) {
-        return milestoneGetByMilestoneIdAdaptor.sendGetMilestonesRequest(milestoneId);
+    public ResponseMilestoneDto getMilestone(long projectId, long milestoneId) {
+        return milestoneGetByMilestoneIdAdaptor.sendGetMilestoneByMilestoneIdRequest(projectId, milestoneId);
     }
 
 }
