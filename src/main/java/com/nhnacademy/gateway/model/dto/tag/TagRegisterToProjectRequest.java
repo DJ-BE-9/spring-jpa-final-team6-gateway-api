@@ -12,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TagRegisterToProjectRequest {
     @NotNull
-    private String projectTagName;
+    private String tagName;
 }

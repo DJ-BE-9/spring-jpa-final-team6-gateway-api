@@ -62,7 +62,6 @@
         }
         .project-title { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
         .plus-box { width: 150px; height: 150px; background: white; border: 2px solid #4a90e2; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
-
         /* 오른쪽 팀원 목록 */
         .team-sidebar {
             width: 300px;
@@ -105,7 +104,6 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         .task-button:hover {
             background-color: #357ABD;
         }
@@ -187,6 +185,17 @@
         </span>
     </div>
 </div>
+
+<!-- 태그 모달 -->
+<div id="tagModal" class="modal">
+    <div class="modal-content">
+        <h2>태그 관리</h2>
+        <div id="tagList"></div>
+        <button onclick="addTagInput()">+ 새 태그 추가</button>
+        <button onclick="closeModal('tagModal')">닫기</button>
+    </div>
+</div>
+
 
 <!-- 마일스톤 모달 (기존 코드 유지) -->
 <div id="milestoneModal" class="modal">
@@ -317,6 +326,152 @@
                 });
         }
     }
+
+    function addTagInput() {
+        const projectId = document.getElementById('projectId').value;
+        const tagList = document.getElementById('tagList');
+
+        const div = document.createElement('div');
+        div.className = 'item';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = '새 태그 입력';
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = '저장';
+        saveButton.onclick = function () {
+            const tagName = input.value.trim();
+            if (!tagName) {
+                alert('태그 이름을 입력하세요.');
+                return;
+            }
+            fetch(`/project/${projectId}/tag`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tagName })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        loadTags(projectId);
+                    } else {
+                        loadTags(projectId);
+                    }
+                })
+                .catch(error => {
+                    console.error('태그 등록 실패:', error);
+                    loadTags(projectId);
+                });
+        };
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '삭제';
+        deleteButton.onclick = function () {
+            tagList.removeChild(div);
+        };
+
+        div.appendChild(input);
+        div.appendChild(saveButton);
+        div.appendChild(deleteButton);
+        tagList.appendChild(div);
+    }
+
+    function loadTags(projectId) {
+        fetch(`/project/${projectId}/tag`)
+            .then(response => response.json())
+            .then(tags => {
+                const tagList = document.getElementById('tagList');
+                tagList.innerHTML = '';
+
+                if (tags.length === 0) {
+                    tagList.innerHTML = '<div>등록된 태그가 없습니다.</div>';
+                } else {
+                    tags.forEach(tag => {
+                        tagList.appendChild(createTagItem(projectId, tag));
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('태그 불러오기 실패:', error);
+            });
+    }
+
+    function createTagItem(projectId, tag) {
+        const div = document.createElement('div');
+        div.className = 'item';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = tag.tagName;
+        input.disabled = true;
+
+        const editButton = document.createElement('button');
+        editButton.textContent = '수정';
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = '저장';
+        saveButton.style.display = 'none'; // 처음에는 저장 버튼 숨김
+
+        editButton.onclick = function () {
+            input.disabled = false;
+            editButton.style.display = 'none';
+            saveButton.style.display = 'inline';
+        };
+
+        saveButton.onclick = function () {
+            const newTagName = input.value.trim();
+            if (!newTagName) {
+                alert('태그 이름을 입력하세요.');
+                return;
+            }
+            fetch('/project/' + projectId + '/tag/' + tag.tagId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tagName: newTagName })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('수정 실패');
+                    }
+                    alert('수정 완료');
+                    input.disabled = true;
+                    editButton.style.display = 'inline';
+                    saveButton.style.display = 'none';
+                    // 저장 후 목록을 다시 불러오지 않고 바로 상태만 갱신
+                })
+                .catch(error => {
+                    console.error('태그 수정 실패:', error);
+                    alert('수정 실패');
+                });
+        };
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '삭제';
+        deleteButton.onclick = function () {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                fetch(`/project/${projectId}/tag/${tag.tagId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('삭제 실패');
+                        }
+                        alert('삭제 완료');
+                        loadTags(projectId);
+                    })
+                    .catch(error => {
+                        console.error('태그 삭제 실패:', error);
+                        alert('삭제 실패');
+                    });
+            }
+        };
+
+        div.appendChild(input);
+        div.appendChild(editButton);
+        div.appendChild(saveButton);
+        div.appendChild(deleteButton);
+
+        return div;
+    }
+
 </script>
 
 </body>
