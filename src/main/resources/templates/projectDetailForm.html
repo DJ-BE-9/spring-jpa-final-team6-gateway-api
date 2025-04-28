@@ -4,8 +4,33 @@
     <meta charset="UTF-8">
     <title>내 프로젝트</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
-        header { background-color: #4a90e2; padding: 1rem 2rem; color: white; font-size: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4a90e2;
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left { font-size: 1.5rem; font-weight: bold; }
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        select, button {
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button {
+            background-color: white;
+            color: #4a90e2;
+        }
         .container { padding: 2rem; }
         .filter-bar {
             background: white;
@@ -29,43 +54,43 @@
         }
         .project-title { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
         .plus-box { width: 150px; height: 150px; background: white; border: 2px solid #4a90e2; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 2; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
+        .item { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <div>내 프로젝트</div>
-    <div>
-        <span th:text="${memberName}">test1</span> 님
-        <select>
-            <option>가입</option>
-            <option>휴면</option>
-            <option>탈퇴</option>
-        </select>
-        <button>프로젝트 생성</button>
-        <button>로그아웃</button>
+    <div class="header-left">내 프로젝트</div>
+    <div class="header-right">
+        <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님</span>
+        <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
+            <select name="cud" onchange="this.form.submit()">
+                <option value="JOIN">가입</option>
+                <option value="DORMANT">휴면</option>
+                <option value="WITHDRAWAL">탈퇴</option>
+            </select>
+        </form>
+        <form th:action="@{/project/register}" method="get">
+            <input type="hidden" name="memberId" th:value="${memberId}" />
+            <button type="submit">프로젝트 생성</button>
+        </form>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
     </div>
 </header>
 
+<input type="hidden" id="projectId" th:value="${projectId}" />
 <div class="container">
     <div class="project-title" th:text="${projectTitle}">프로젝트 Title</div>
 
     <div class="filter-bar">
         <!-- 왼쪽: 태그, 마일스톤 -->
         <div class="filter-left">
-            <label>태그:
-                <select id="tagSelect" onchange="onTagSelect()">
-                    <option value="">전체</option>
-                    <option value="tag1">태그1</option>
-                    <option value="tag2">태그2</option>
-                    <option value="new">+ 새 태그 등록</option> <!-- 새 태그 등록용 옵션 -->
-                </select>
-            </label>
-            <label>마일스톤:
-                <select>
-                    <option>전체</option>
-                </select>
-            </label>
+            <label>태그: <select onclick="openModal('tagModal')"><option>전체</option></select></label>
+            <label>마일스톤: <select onclick="openModal('milestoneModal')"><option>전체</option></select></label>
         </div>
 
         <!-- 오른쪽: 팀원 추가 -->
@@ -74,50 +99,137 @@
             <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
         </form>
     </div>
+    <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
+</div>
 
-    <!-- 숨겨진 태그 등록 폼 -->
-    <div id="tagRegisterSection" class="tag-register-section">
-        <input type="text" id="newTagName" placeholder="새 태그 입력">
-        <button onclick="registerNewTag()">등록</button>
+<!-- 마일스톤 모달 -->
+<div id="milestoneModal" class="modal">
+    <div class="modal-content">
+        <h2 id="milestoneModalTitle">마일스톤 추가</h2>
+        <input type="text" id="milestoneName" placeholder="마일스톤 이름 입력" required>
+        <div style="margin-top: 0.5rem;">
+            기간
+            <label><input type="radio" name="milestonePeriod" value="none" checked onchange="togglePeriodInput()"> 없음</label>
+            <label><input type="radio" name="milestonePeriod" value="set" onchange="togglePeriodInput()"> 있음</label>
+        </div>
+        <div id="periodInputs" style="display: none; margin-top: 0.5rem;">
+            <input type="date" id="startDate"> ~ <input type="date" id="endDate">
+        </div>
+        <button id="saveMilestoneButton" onclick="saveMilestone()">저장</button>
+        <div id="milestoneList"></div>
+        <button onclick="closeModal('milestoneModal')">닫기</button>
     </div>
-
-    <!-- 태그 리스트 -->
-    <div id="tagList" style="margin-top: 2rem;">
-        <!-- 새로 등록된 태그 리스트 표시할 부분 -->
-    </div>
-
-    <!-- 프로젝트 안의 + 버튼 (task 추가 등) -->
-    <div class="plus-box">
-        +
-    </div>
-
 </div>
 
 <script>
-    function onTagSelect() {
-        const select = document.getElementById('tagSelect');
-        const selectedValue = select.value;
+    let editingMilestoneId = null; // 수정모드 플래그
 
-        if (selectedValue === 'new') {
-            document.getElementById('tagRegisterSection').style.display = 'block';
-        } else {
-            document.getElementById('tagRegisterSection').style.display = 'none';
+    function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+        if (id === 'milestoneModal') {
+            togglePeriodInput();
+            loadMilestones();
         }
     }
 
-    function registerNewTag() {
-        const tagName = document.getElementById('newTagName').value.trim();
-        if (!tagName) {
-            alert('태그 이름을 입력하세요.');
-            return;
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+        resetMilestoneModal();
+    }
+
+    function togglePeriodInput() {
+        const selected = document.querySelector('input[name="milestonePeriod"]:checked').value;
+        document.getElementById('periodInputs').style.display = selected === 'set' ? 'block' : 'none';
+    }
+
+    function resetMilestoneModal() {
+        document.getElementById('milestoneModalTitle').textContent = '마일스톤 추가';
+        document.getElementById('saveMilestoneButton').textContent = '저장';
+        editingMilestoneId = null;
+        document.getElementById('milestoneName').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        document.querySelector('input[value="none"]').checked = true;
+        togglePeriodInput();
+    }
+
+    function loadMilestones() {
+        const projectId = document.getElementById('projectId').value;
+        fetch(`/project/${projectId}/milestone`)
+            .then(response => response.json())
+            .then(data => renderMilestoneList(data))
+            .catch(console.error);
+    }
+
+    function renderMilestoneList(data) {
+        const milestoneList = document.getElementById('milestoneList');
+        milestoneList.innerHTML = '';
+
+        data.milestones.forEach(milestone => {
+            const div = document.createElement('div');
+            div.className = 'item';
+
+            const infoDiv = document.createElement('div');
+            infoDiv.style.flex = '1';
+            infoDiv.innerHTML = `<strong>${milestone.milestoneName}</strong><br>`;
+            if (milestone.milestoneStartedAt && milestone.milestoneEndedAt) {
+                infoDiv.innerHTML += `${milestone.milestoneStartedAt.slice(0, 10)} ~ ${milestone.milestoneEndedAt.slice(0, 10)}`;
+            }
+
+            const editButton = document.createElement('button');
+            editButton.textContent = '수정';
+            editButton.onclick = () => {
+                editingMilestoneId = milestone.milestoneId;
+                document.getElementById('milestoneModalTitle').textContent = '마일스톤 수정';
+                document.getElementById('saveMilestoneButton').textContent = '수정완료'; // ✅ 수정모드일 때 버튼 텍스트 변경
+                document.getElementById('milestoneName').value = milestone.milestoneName;
+                if (milestone.milestoneStartedAt) document.getElementById('startDate').value = milestone.milestoneStartedAt.slice(0, 10);
+                if (milestone.milestoneEndedAt) document.getElementById('endDate').value = milestone.milestoneEndedAt.slice(0, 10);
+                openModal('milestoneModal');
+            };
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '삭제';
+            deleteButton.onclick = () => deleteMilestone(milestone.milestoneId);
+
+            div.append(infoDiv, editButton, deleteButton);
+            milestoneList.appendChild(div);
+        });
+    }
+
+    function saveMilestone() {
+        const projectId = document.getElementById('projectId').value;
+        const name = document.getElementById('milestoneName').value.trim();
+        const startDate = document.getElementById('startDate').value ? new Date(document.getElementById('startDate').value).toISOString() : null;
+        const endDate = document.getElementById('endDate').value ? new Date(document.getElementById('endDate').value).toISOString() : null;
+        const requestData = { milestoneName: name, milestoneStartedAt: startDate, milestoneEndedAt: endDate };
+
+        const url = editingMilestoneId ? `/project/${projectId}/milestone/${editingMilestoneId}` : `/project/${projectId}/milestone`;
+        const method = editingMilestoneId ? 'PUT' : 'POST';
+
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.ok ? loadMilestones() : Promise.reject('실패'))
+            .then(() => closeModal('milestoneModal'))
+            .catch(error => {
+                console.error(error);
+                alert('저장에 실패했습니다.');
+            });
+    }
+
+    function deleteMilestone(milestoneId) {
+        const projectId = document.getElementById('projectId').value;
+        if (confirm('정말 삭제하시겠습니까?')) {
+            fetch(`/project/${projectId}/milestone/${milestoneId}`, { method: 'DELETE' })
+                .then(response => response.ok ? loadMilestones() : Promise.reject('삭제 실패'))
+                .catch(error => {
+                    console.error(error);
+                    alert('삭제에 실패했습니다.');
+                });
         }
-
-        const tagList = document.getElementById('tagList');
-        const newTag = document.createElement('div');
-        newTag.textContent = tagName;
-        tagList.appendChild(newTag);
-
-        document.getElementById('newTagName').value = '';
     }
 </script>
 
