@@ -2,6 +2,7 @@ package com.nhnacademy.gateway.common.adaptor.tag;
 
 import com.nhnacademy.gateway.model.dto.ResponseDto;
 import com.nhnacademy.gateway.model.dto.tag.TagRegisterToProjectRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,28 +10,31 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+@Slf4j
 @Component
-public class ProjectRegisterTagAdapter {
+public class TagRegisterAdapter {
     private static final String PROJECT_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
-    public ProjectRegisterTagAdapter(RestTemplate restTemplate) {
+    public TagRegisterAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public boolean sendRegisterRequest(TagRegisterToProjectRequest registerRequest) {
+    public void sendRegisterRequest(long projectId, TagRegisterToProjectRequest registerRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<TagRegisterToProjectRequest> requestHttpEntity = new HttpEntity<>(registerRequest, headers);
 
         try{
-            ResponseEntity<ResponseDto> response = restTemplate.postForEntity(PROJECT_API_URL, requestHttpEntity, ResponseDto.class);
+            String url = PROJECT_API_URL + projectId + "/tag";
+            log.info(url);
+            ResponseEntity<Void> response = restTemplate.postForEntity(url, requestHttpEntity, Void.class);
 
-            return response.getStatusCode().is2xxSuccessful();
+            response.getStatusCode().is2xxSuccessful();
         }catch (Exception e){
-            return false;
+            log.error("Tag 등록 요청 실패",e);
         }
     }
 }

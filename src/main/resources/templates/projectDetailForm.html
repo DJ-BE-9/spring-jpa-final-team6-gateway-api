@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #4a90e2;
             padding: 1rem 2rem;
@@ -18,6 +19,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .header-left {
             font-size: 1.5rem;
             font-weight: bold;
@@ -34,6 +36,7 @@
             border-radius: 6px;
             border: none;
         }
+
         button {
             background-color: white;
             color: #4a90e2;
@@ -49,24 +52,80 @@
         }
 
 
-        .filter-bar { background: white; padding: 1rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; }
-        .project-title { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
-        .plus-box { width: 150px; height: 150px; background: white; border: 2px solid #4a90e2; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; }
+        .filter-bar {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
 
-        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-        .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
-        .modal-content h2 { margin-top: 0; }
-        .item { display: flex; align-items: center; margin-bottom: 0.5rem; }
-        .item input { margin-right: 0.5rem; flex: 1; }
-        .item button { margin-left: 0.2rem; }
+        .project-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .plus-box {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border: 2px solid #4a90e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .item input {
+            margin-right: 0.5rem;
+            flex: 1;
+        }
+
+        .item button {
+            margin-left: 0.2rem;
+        }
     </style>
 </head>
 <body>
 
+<!-- 메인 헤더 -->
 <header>
     <div class="header-left">내 프로젝트</div>
     <div class="header-right">
-        <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님 </span>
+        <span th:text="${memberName}" style="font-weight: bold;"></span> 님
         <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
             <select name="cud" onchange="this.form.submit()">
                 <option value="JOIN">가입</option>
@@ -74,46 +133,40 @@
                 <option value="WITHDRAWAL">탈퇴</option>
             </select>
         </form>
-
         <form th:action="@{/project/register}" method="get">
-            <input type="hidden" name="memberId" th:value="${memberId}" />
+            <input type="hidden" name="memberId" th:value="${memberId}"/>
             <button type="submit">프로젝트 생성</button>
         </form>
-
         <form th:action="@{/logout}" method="post">
             <button type="submit">로그아웃</button>
         </form>
     </div>
 </header>
 
+<input type="hidden" id="projectId" th:value="${projectId}"/>
 <div class="container">
     <div class="project-title" th:text="${projectTitle}">프로젝트 Title</div>
 
     <div class="filter-bar">
-        <label>태그:
-            <select th:onclick="|openTagModal(${projectId})|">
-            <option>전체</option>
-            </select>
-        </label>
-        <label>마일스톤:
-            <select onclick="openModal('milestoneModal')">
+        <div class="filter-left">
+            <label>태그: <select onclick="openModal('tagModal')">
                 <option>전체</option>
-            </select>
-        </label>
+            </select></label>
+            <label>마일스톤: <select onclick="openModal('milestoneModal')">
+                <option>전체</option>
+            </select></label>
+        </div>
     </div>
 
-    <div class="plus-box">
-        +
-    </div>
+    <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
 </div>
 
-<!-- 태그 모달-->
+<!-- 태그 모달 -->
 <div id="tagModal" class="modal">
     <div class="modal-content">
         <h2>태그 관리</h2>
-        <div id="tagList">
-        </div>
-        <button onclick="addItem('tag')">+ 새 태그 추가</button>
+        <div id="tagList"></div>
+        <button onclick="addTagInput()">+ 새 태그 추가</button>
         <button onclick="closeModal('tagModal')">닫기</button>
     </div>
 </div>
@@ -122,27 +175,7 @@
 <div id="milestoneModal" class="modal">
     <div class="modal-content">
         <h2>마일스톤 관리</h2>
-
-        <div style="margin-bottom: 1rem;">
-            <input type="text" id="milestoneName" placeholder="마일스톤 이름 입력" required>
-
-            <div style="margin-top: 0.5rem;">
-                기간
-                <label><input type="radio" name="milestonePeriod" value="none" checked onchange="togglePeriodInput()"> 없음</label>
-                <label><input type="radio" name="milestonePeriod" value="set" onchange="togglePeriodInput()"> 있음</label>
-            </div>
-
-            <div id="periodInputs" style="display: none; margin-top: 0.5rem;">
-                <input type="date" id="startDate">
-                ~
-                <input type="date" id="endDate">
-            </div>
-
-            <button onclick="addMilestone()">+ 새 마일스톤 추가</button>
-        </div>
-
-        <div id="milestoneList"></div>
-
+        <!-- 마일스톤 관리 코드는 이후 추가 -->
         <button onclick="closeModal('milestoneModal')">닫기</button>
     </div>
 </div>
@@ -150,54 +183,65 @@
 <script>
     function openModal(id) {
         document.getElementById(id).style.display = 'block';
+        if (id === 'tagModal') {
+            const projectId = document.getElementById('projectId').value;
+            loadTags(projectId);
+        }
     }
 
     function closeModal(id) {
         document.getElementById(id).style.display = 'none';
     }
 
-    function addItem(type) {
-        const listId = type === 'tag' ? 'tagList' : 'milestoneList';
-        const list = document.getElementById(listId);
+    function addTagInput() {
+        const projectId = document.getElementById('projectId').value;
+        const tagList = document.getElementById('tagList');
 
         const div = document.createElement('div');
         div.className = 'item';
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.placeholder = type === 'tag' ? '새 태그 입력' : '새 마일스톤 입력';
+        input.placeholder = '새 태그 입력';
 
         const saveButton = document.createElement('button');
         saveButton.textContent = '저장';
-        saveButton.onclick = function() {
-            if (input.value.trim() !== '') {
-                input.disabled = true;
-                saveButton.style.display = 'none';
-            } else {
-                alert('값을 입력하세요.');
+        saveButton.onclick = function () {
+            const tagName = input.value.trim();
+            if (!tagName) {
+                alert('태그 이름을 입력하세요.');
+                return;
             }
-        };
-
-        const editButton = document.createElement('button');
-        editButton.textContent = '수정';
-        editButton.onclick = function() {
-            input.disabled = false;
-            saveButton.style.display = 'inline';
+            fetch(`/project/${projectId}/tag`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tagName })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        loadTags(projectId);
+                    } else {
+                        loadTags(projectId);
+                    }
+                })
+                .catch(error => {
+                    console.error('태그 등록 실패:', error);
+                    loadTags(projectId);
+                });
         };
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = '삭제';
-        deleteButton.onclick = function() {
-            list.removeChild(div);
+        deleteButton.onclick = function () {
+            tagList.removeChild(div);
         };
 
         div.appendChild(input);
         div.appendChild(saveButton);
-        div.appendChild(editButton);
         div.appendChild(deleteButton);
-
-        list.appendChild(div);
+        tagList.appendChild(div);
     }
+
     function loadTags(projectId) {
         fetch(`/project/${projectId}/tag`)
             .then(response => response.json())
@@ -209,112 +253,91 @@
                     tagList.innerHTML = '<div>등록된 태그가 없습니다.</div>';
                 } else {
                     tags.forEach(tag => {
-                        const div = document.createElement('div');
-                        div.className = 'item';
-
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = tag.tagName;
-                        input.disabled = true;
-
-                        div.appendChild(input);
-                        tagList.appendChild(div);
+                        tagList.appendChild(createTagItem(projectId, tag));
                     });
                 }
             })
             .catch(error => {
-                console.error('태그 로드 실패:', error);
+                console.error('태그 불러오기 실패:', error);
             });
     }
-    function openTagModal(projectId) {
-        openModal('tagModal');
-        loadTags(projectId);
-    }
-</script><script>
-    function togglePeriodInput() {
-        const selected = document.querySelector('input[name="milestonePeriod"]:checked').value;
-        document.getElementById('periodInputs').style.display = selected === 'set' ? 'block' : 'none';
-    }
 
-    function addMilestone() {
-        const nameInput = document.getElementById('milestoneName');
-        const startInput = document.getElementById('startDate');
-        const endInput = document.getElementById('endDate');
-        const selectedPeriod = document.querySelector('input[name="milestonePeriod"]:checked').value;
-
-        const name = nameInput.value.trim();
-        if (!name) {
-            alert('마일스톤 이름을 입력하세요.');
-            return;
-        }
-
-        const milestoneList = document.getElementById('milestoneList');
+    function createTagItem(projectId, tag) {
         const div = document.createElement('div');
         div.className = 'item';
 
-        const info = document.createElement('div');
-        info.style.flex = '1';
-        info.style.display = 'flex';
-        info.style.flexDirection = 'column';
-        info.style.gap = '0.3rem';
-
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = name;
-
-        const dateSpan = document.createElement('span');
-        if (selectedPeriod === 'set' && startInput.value && endInput.value) {
-            dateSpan.textContent = `${startInput.value} ~ ${endInput.value}`;
-        }
-
-        info.appendChild(nameSpan);
-        if (dateSpan.textContent) {
-            info.appendChild(dateSpan);
-        }
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = tag.tagName;
+        input.disabled = true;
 
         const editButton = document.createElement('button');
         editButton.textContent = '수정';
-        editButton.style.color = 'blue';
-        editButton.style.background = 'none';
-        editButton.style.border = 'none';
-        editButton.style.cursor = 'pointer';
-        editButton.onclick = function() {
-            nameInput.value = nameSpan.textContent;
-            if (dateSpan.textContent) {
-                const [start, end] = dateSpan.textContent.split(' ~ ');
-                document.getElementById('startDate').value = start;
-                document.getElementById('endDate').value = end;
-                document.querySelector('input[value="set"]').checked = true;
-                togglePeriodInput();
-            } else {
-                document.querySelector('input[value="none"]').checked = true;
-                togglePeriodInput();
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = '저장';
+        saveButton.style.display = 'none'; // 처음에는 저장 버튼 숨김
+
+        editButton.onclick = function () {
+            input.disabled = false;
+            editButton.style.display = 'none';
+            saveButton.style.display = 'inline';
+        };
+
+        saveButton.onclick = function () {
+            const newTagName = input.value.trim();
+            if (!newTagName) {
+                alert('태그 이름을 입력하세요.');
+                return;
             }
-            milestoneList.removeChild(div);
+            fetch('/project/' + projectId + '/tag/' + tag.tagId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tagName: newTagName })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('수정 실패');
+                    }
+                    alert('수정 완료');
+                    input.disabled = true;
+                    editButton.style.display = 'inline';
+                    saveButton.style.display = 'none';
+                    // 저장 후 목록을 다시 불러오지 않고 바로 상태만 갱신
+                })
+                .catch(error => {
+                    console.error('태그 수정 실패:', error);
+                    alert('수정 실패');
+                });
         };
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = '삭제';
-        deleteButton.style.color = 'blue';
-        deleteButton.style.background = 'none';
-        deleteButton.style.border = 'none';
-        deleteButton.style.cursor = 'pointer';
-        deleteButton.onclick = function() {
-            milestoneList.removeChild(div);
+        deleteButton.onclick = function () {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                fetch(`/project/${projectId}/tag/${tag.tagId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('삭제 실패');
+                        }
+                        alert('삭제 완료');
+                        loadTags(projectId);
+                    })
+                    .catch(error => {
+                        console.error('태그 삭제 실패:', error);
+                        alert('삭제 실패');
+                    });
+            }
         };
 
-        div.appendChild(info);
+        div.appendChild(input);
         div.appendChild(editButton);
+        div.appendChild(saveButton);
         div.appendChild(deleteButton);
 
-        milestoneList.appendChild(div);
-
-        // 초기화
-        nameInput.value = '';
-        startInput.value = '';
-        endInput.value = '';
-        document.querySelector('input[value="none"]').checked = true;
-        togglePeriodInput();
+        return div;
     }
+
 </script>
 
 </body>

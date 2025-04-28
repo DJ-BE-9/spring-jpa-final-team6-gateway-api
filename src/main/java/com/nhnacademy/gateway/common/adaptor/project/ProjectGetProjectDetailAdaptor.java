@@ -18,7 +18,6 @@ public class ProjectGetProjectDetailAdaptor { // 프로젝트 상세 페이지
         this.restTemplate = restTemplate;
     }
 
-//    public ResponseProjectDto sendAndGetProject(MemberIdRequest memberIdRequest) { //TODO member?
     public ResponseProjectDto sendAndGetProject(Long projectId) {
 
         try {
