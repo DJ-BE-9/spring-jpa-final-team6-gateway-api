@@ -34,10 +34,15 @@ public class ProjectDetailController {
     private MemberStatusAdaptor memberStatusAdaptor;
     @Autowired
     private ProjectPostProjectStateAdaptor projectPostProjectStateAdaptor;
+    // TODO Task 목록 보여주기
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping
-    public String getProjectDetail(@PathVariable("projectId") long projectId, Model model, HttpServletRequest request) {
+    public String getProjectDetail(@PathVariable("projectId") long projectId, Model model) {
         Project project = projectService.getProjectByProjectId(projectId);
+//        model.addAttribute("project", project.getProjectId());
+//        model.addAttribute("projectId", projectId);
         model.addAttribute("projectTitle", project.getProjectName());
         model.addAttribute("projectState", project.getProjectState());
 
@@ -53,6 +58,9 @@ public class ProjectDetailController {
         }
 
         model.addAttribute("projectState", project.getProjectState());
+
+        List<ResponseTaskDetailDto> taskList= taskService.getTaskByProjectId(projectId);
+        model.addAttribute("taskList", taskList);
 
         return "projectDetailForm";
     }

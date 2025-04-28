@@ -93,6 +93,22 @@
         .modal { display: none; position: fixed; z-index: 2; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
         .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
         .item { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+
+        /* 태스크 생성 버튼 */
+        .task-button {
+            padding: 0.5rem 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-button:hover {
+            background-color: #357ABD;
+        }
     </style>
 </head>
 <body>
@@ -140,11 +156,16 @@
                 <label>태그: <select onclick="openModal('tagModal')"><option>전체</option></select></label>
                 <label>마일스톤: <select onclick="openModal('milestoneModal')"><option>전체</option></select></label>
             </div>
+            <div class="filter-right" style="margin: 0 1rem">
+                <form th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
+                    <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
+                    <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
+                </form>
+                <form th:action="@{/project/{projectId}/task(projectId=${projectId})}" method="get">
+                    <button type="submit" class="task-button" style="padding: 0.5rem;">태스크 생성</button>
+                </form>
+            </div>
 
-            <form class="filter-right" th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
-                <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
-                <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
-            </form>
         </div>
         <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
     </div>
