@@ -1,12 +1,13 @@
 package com.nhnacademy.gateway.service;
 
+import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.projectTag.ProjectTagPostRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskGetTaskDetailAdaptor;
+import com.nhnacademy.gateway.common.adaptor.task.TaskDeleteAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskGetTasksAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskPostRegisterAdaptor;
 import com.nhnacademy.gateway.common.adaptor.task.TaskPutUpdateAdaptor;
 import com.nhnacademy.gateway.exception.EmptyRequestException;
-import com.nhnacademy.gateway.exception.MemberRegisterProcessException;
 import com.nhnacademy.gateway.exception.RegisterProcessException;
 import com.nhnacademy.gateway.model.dto.milestone.ResponseMilestoneDto;
 import com.nhnacademy.gateway.model.dto.tag.ResponseTagDto;
@@ -20,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,10 @@ public class TaskService {
     private TaskGetTaskDetailAdaptor taskGetTaskDetailAdaptor;
 
     // 태스크 삭제 요청 어댑터
+    @Autowired
+    private TaskDeleteAdaptor taskDeleteAdaptor;
+    @Autowired
+    private ProjectTagDeleteAdaptor projectTagDeleteAdaptor;
 
     @Autowired
     private MilestoneService milestoneService;
@@ -93,6 +96,13 @@ public class TaskService {
 
         return null;
     }
+
+    public void deleteTask(long projectId, long taskId) {
+        projectTagDeleteAdaptor.sendDeleteProjectTag(projectId, taskId);
+        taskDeleteAdaptor.sendDeleteRequest(projectId, taskId);
+    }
+
+
 
 
 }
