@@ -88,12 +88,25 @@
             height: 10px;
             border-radius: 50%;
         }
-        .online { background-color: #4caf50; }
-        .offline { background-color: #ccc; }
 
         .modal { display: none; position: fixed; z-index: 2; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
         .modal-content { background-color: white; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 30%; }
         .item { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+
+        /* 태스크 생성 버튼 */
+        .task-button {
+            padding: 0.5rem 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .task-button:hover {
+            background-color: #357ABD;
+        }
     </style>
 </head>
 <body>
@@ -103,8 +116,8 @@
     <header>
         <div class="header-left">내 프로젝트</div>
         <div class="header-right">
-            <span th:text="${memberName}" style="color: white; font-weight: bold;"></span><span>님</span>
-            <form th:action="@{/project/{memberId}/state(memberId=${memberId})}" method="post">
+            <span th:text="${memberId}" style="color: white; font-weight: bold;"></span><span>님</span>
+            <form th:action="@{/project/{projectId}/members/{memberId}/state(projectId=${projectId}, memberId=${memberId})}" method="post">
                 <select name="cud" onchange="this.form.submit()">
                     <option value="JOIN">가입</option>
                     <option value="DORMANT">휴면</option>
@@ -123,20 +136,53 @@
 
     <input type="hidden" id="projectId" th:value="${projectId}" />
     <div class="container">
-        <div class="project-title" th:text="${projectTitle}">프로젝트 Title</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="project-title" th:text="${projectTitle}">프로젝트 Title</div>
+
+            <form th:action="@{/project/{projectId}/members/{memberId}/state(projectId=${projectId}, memberId=${memberId})}" method="post" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-weight: bold;">프로젝트 상태:</span>
+                <select name="projectState" onchange="this.form.submit()" style="padding: 0.4rem;">
+                    <option value="ACTIVE" th:selected="${projectState == 'ACTIVE'}">활성</option>
+                    <option value="DORMANT" th:selected="${projectState == 'DORMANT'}">휴면</option>
+                    <option value="COMPLETED" th:selected="${projectState == 'COMPLETED'}">종료</option>
+                </select>
+            </form>
+        </div>
 
         <div class="filter-bar">
             <div class="filter-left">
                 <label>태그: <select onclick="openModal('tagModal')"><option>전체</option></select></label>
                 <label>마일스톤: <select onclick="openModal('milestoneModal')"><option>전체</option></select></label>
             </div>
+            <div class="filter-right" style="margin: 0 1rem">
+                <form th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
+                    <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
+                    <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
+                </form>
+                <form th:action="@{/project/{projectId}/task(projectId=${projectId})}" method="get">
+                    <button type="submit" class="task-button" style="padding: 0.5rem;">태스크 생성</button>
+                </form>
+            </div>
 
-            <form class="filter-right" th:action="@{/project/{projectId}/members(projectId=${projectId})}" method="post">
-                <input type="text" id="memberId" name="memberId" placeholder="팀원 아이디 입력" style="padding: 0.5rem;">
-                <button type="submit" style="padding: 0.5rem;">팀원 추가</button>
-            </form>
         </div>
         <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
+    </div>
+</div>
+
+<!-- 오른쪽 팀원 사이드바 -->
+<div class="team-sidebar">
+    <h2>팀원 목록</h2>
+    <div th:each="member : ${projectMembers}" class="team-member">
+        <span th:text="${member.memberId}">팀원 이름</span>
+        <form th:action="@{/project/{projectId}/members/{memberId}(projectId=${projectId}, memberId=${member})}" method="post" style="margin: 0;">
+            <input type="hidden" name="_method" value="delete" />
+            <button type="submit" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background-color: #ff4d4f; color: white; border-radius: 4px;">삭제</button>
+        </form>
+
+        <!-- ✅ 관리자인 경우 파란 글씨로 "관리자" 표시 -->
+        <span th:if="${member.isAdmin}" style="color: #4a90e2; font-size: 0.8rem; font-weight: bold; margin-left: 0.5rem;">
+            관리자
+        </span>
     </div>
 </div>
 
@@ -150,22 +196,22 @@
     </div>
 </div>
 
-<!-- 오른쪽 팀원 사이드바 -->
-<div class="team-sidebar">
-    <h2>팀원 목록</h2>
-    <div th:each="member : ${teamMembers}">
-        <div class="team-member">
-            <div class="status-indicator" th:classappend="${member.online} ? 'online' : 'offline'"></div>
-            <span th:text="${member.name}">팀원 이름</span>
-        </div>
-    </div>
-</div>
 
-<!-- 마일스톤 모달 -->
+<!-- 마일스톤 모달 (기존 코드 유지) -->
 <div id="milestoneModal" class="modal">
     <div class="modal-content">
-        <h2>마일스톤 관리</h2>
-        <!-- 마일스톤 관리 코드는 이후 추가 -->
+        <h2 id="milestoneModalTitle">마일스톤 추가</h2>
+        <input type="text" id="milestoneName" placeholder="마일스톤 이름 입력" required>
+        <div style="margin-top: 0.5rem;">
+            기간
+            <label><input type="radio" name="milestonePeriod" value="none" checked onchange="togglePeriodInput()"> 없음</label>
+            <label><input type="radio" name="milestonePeriod" value="set" onchange="togglePeriodInput()"> 있음</label>
+        </div>
+        <div id="periodInputs" style="display: none; margin-top: 0.5rem;">
+            <input type="date" id="startDate"> ~ <input type="date" id="endDate">
+        </div>
+        <button id="saveMilestoneButton" onclick="saveMilestone()">저장</button>
+        <div id="milestoneList"></div>
         <button onclick="closeModal('milestoneModal')">닫기</button>
     </div>
 </div>
@@ -175,14 +221,15 @@
 
     function openModal(id) {
         document.getElementById(id).style.display = 'block';
-        if (id === 'tagModal') {
-            const projectId = document.getElementById('projectId').value;
-            loadTags(projectId);
+        if (id === 'milestoneModal') {
+            togglePeriodInput();
+            loadMilestones();
         }
     }
 
     function closeModal(id) {
         document.getElementById(id).style.display = 'none';
+        resetMilestoneModal();
     }
 
     function togglePeriodInput() {

@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterProjectMemberRequest {
+public class ProjectMember {
 
     private String memberId;
-    private boolean projectManager;
+    private boolean isAdmin;
 
 }

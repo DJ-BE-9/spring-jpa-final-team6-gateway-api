@@ -1,5 +1,6 @@
 package com.nhnacademy.gateway.model.request.project;
 
+import com.nhnacademy.gateway.model.type.State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterProjectMemberRequest {
+public class ProjectStateRequest {
 
-    private String memberId;
-    private boolean projectManager;
+    private long projectId;
+    private State projectState;
 
 }

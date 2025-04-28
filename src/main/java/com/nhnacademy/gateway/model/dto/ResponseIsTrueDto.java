@@ -1,4 +1,4 @@
-package com.nhnacademy.gateway.model.request.project;
+package com.nhnacademy.gateway.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterProjectMemberRequest {
+public class ResponseIsTrueDto {
 
-    private String memberId;
-    private boolean projectManager;
+    private boolean isExistsMember;
 
 }

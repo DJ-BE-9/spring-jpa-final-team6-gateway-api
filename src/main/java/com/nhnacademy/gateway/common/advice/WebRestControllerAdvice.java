@@ -35,4 +35,9 @@ public class WebRestControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(NotFoundMemberException.class)
+    public ResponseEntity<String> notFoundMemberException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 }

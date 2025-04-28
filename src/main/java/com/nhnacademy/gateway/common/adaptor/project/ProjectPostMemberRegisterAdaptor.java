@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class ProjectPostMemberRegisterAdaptor {
-    private static final String REGISTER_MEMBER_URL = "http://localhost:7070/project/";
+    private static final String REGISTER_MEMBER_API_URL = "http://localhost:7070/project/";
 
     private final RestTemplate restTemplate;
 
@@ -24,9 +24,9 @@ public class ProjectPostMemberRegisterAdaptor {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RegisterProjectMemberRequest> requestHttpEntity = new HttpEntity<>(registerProjectMemberRequest, headers);
-        log.info("{}", registerProjectMemberRequest.getUserId());
+        log.info("{}", registerProjectMemberRequest.getMemberId());
         try {
-            String url = REGISTER_MEMBER_URL + projectId + "/members";
+            String url = REGISTER_MEMBER_API_URL + projectId + "/members";
             ResponseEntity<ResponseDto> response = restTemplate.postForEntity(url, requestHttpEntity, ResponseDto.class);
 
             return response.getStatusCode().is2xxSuccessful();
