@@ -56,6 +56,9 @@ public class TaskService {
     @Autowired
     private MilestoneService milestoneService;
 
+    @Autowired
+    private TagService tagService;
+
     public void registerTask(long projectId, RegisterTaskTagRequest request) {
         if(Objects.isNull(request)) {
             throw new EmptyRequestException("RegisterTaskRequest 값을 받지 못했습니다");
