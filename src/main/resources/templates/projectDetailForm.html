@@ -107,6 +107,21 @@
         .task-button:hover {
             background-color: #357ABD;
         }
+
+        .task-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .task-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            width: 250px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
@@ -165,7 +180,20 @@
             </div>
 
         </div>
-        <div class="plus-box" onclick="openModal('milestoneModal')">+</div>
+        <div class="task-list">
+            <div th:each="task : ${taskList}" class="task-card">
+                <h3 th:text="${task.taskTitle}">태스크 제목</h3>
+                <p th:text="${task.taskDescription}">태스크 설명</p>
+                <div>
+                    <strong>마일스톤:</strong>
+                    <span th:text="${task.milestone != null ? task.milestone.getMilestoneName() : '없음'}">마일스톤 이름</span>
+                </div>
+                <div>
+                    <strong>태그:</strong>
+                    <span th:text="${task.tag != null ? task.tag.getTagName() : '없음'}">태그 이름</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
